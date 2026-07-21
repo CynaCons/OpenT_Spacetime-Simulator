@@ -1,9 +1,12 @@
 import { Canvas } from '@react-three/fiber'
 import { ChapterPanel } from '../components/ChapterPanel'
 import { EarthLabHud } from '../components/EarthLabHud'
+import { NewtonHud } from '../components/NewtonHud'
+import { SandboxHud } from '../components/SandboxHud'
 import { TopBar } from '../components/TopBar'
 import { CameraRig } from '../scenes/CameraRig'
 import { EarthLabScene } from '../scenes/earth/EarthLabScene'
+import { GravitySandboxScene } from '../scenes/GravitySandboxScene'
 import { SolarSystemScene } from '../scenes/SolarSystemScene'
 import { useSimulation } from '../state/simulationStore'
 import styles from './App.module.css'
@@ -37,9 +40,21 @@ function EarthHint() {
   )
 }
 
+function SandboxHint() {
+  return (
+    <div className={styles.hint}>
+      Gravity sandbox · Place mass/particle on the grid · Green = velocity · Red = force · Adjust G
+    </div>
+  )
+}
+
 export function App() {
   const chapterId = useSimulation((s) => s.chapterId)
   const isEarthLab = chapterId === 'earth-not-flat'
+  const isSandbox = chapterId === 'gravity-sandbox'
+  const isNewton = chapterId === 'newtonian-solar-system'
+
+  const canvasKey = isEarthLab ? 'earth-lab' : isSandbox ? 'sandbox' : 'solar'
 
   return (
     <div className={styles.app}>
@@ -48,17 +63,21 @@ export function App() {
         <ChapterPanel />
         <div className={styles.viewport}>
           <Canvas
-            key={isEarthLab ? 'earth-lab' : 'solar'}
+            key={canvasKey}
             camera={
               isEarthLab
                 ? { position: [0, 7, 4], fov: 50, near: 0.05, far: 500 }
-                : { position: [0, 28, 42], fov: 45, near: 0.1, far: 2000 }
+                : isSandbox
+                  ? { position: [0, 14, 16], fov: 50, near: 0.1, far: 500 }
+                  : { position: [0, 28, 42], fov: 45, near: 0.1, far: 2000 }
             }
             dpr={[1, 2]}
             gl={{ antialias: true }}
           >
             {isEarthLab ? (
               <EarthLabScene />
+            ) : isSandbox ? (
+              <GravitySandboxScene />
             ) : (
               <>
                 <SolarSystemScene />
@@ -66,14 +85,25 @@ export function App() {
               </>
             )}
           </Canvas>
-          {isEarthLab ? (
+          {isEarthLab && (
             <>
               <EarthLabHud />
               <EarthHint />
             </>
-          ) : (
-            <SolarHint />
           )}
+          {isNewton && (
+            <>
+              <NewtonHud />
+              <SolarHint />
+            </>
+          )}
+          {isSandbox && (
+            <>
+              <SandboxHud />
+              <SandboxHint />
+            </>
+          )}
+          {!isEarthLab && !isNewton && !isSandbox && <SolarHint />}
         </div>
       </div>
     </div>

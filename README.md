@@ -96,9 +96,11 @@ Open the URL Vite prints (default `http://localhost:5173`).
 
 **Phase 0–1:** app shell, solar system, camera centers, GitHub Pages.
 
-**Phase 2 (Chapter 1) — mature v1:** dedicated Earth lab with **rocket ascent** (sphere vs flat), horizon geometry readouts, teaching scale, and **ship/horizon** demo. See [PLAN.md](./PLAN.md).
+**Phase 2 (Chapter 1) — mature v1:** Earth lab (rocket, ship/horizon, Everest, FOV).
 
-**Next:** Phase 3 — Newtonian solar system tour + gravity sandbox.
+**Phase 3 (Chapters 2–3) — v1:** Newtonian solar system (force/velocity vectors, planet tour, Kepler check) + gravity pull sandbox (place masses, trails, G, escape speed).
+
+**Next:** Phase 4 — Mercury perihelion anomaly. See [PLAN.md](./PLAN.md).
 
 ---
 

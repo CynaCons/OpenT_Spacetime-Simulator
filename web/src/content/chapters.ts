@@ -63,18 +63,27 @@ export const CHAPTERS: Chapter[] = [
     title: 'Newtonian gravity & the solar system',
     shortTitle: '2 · Newton',
     model: 'Newtonian gravity / Kepler',
-    status: 'scaffold',
+    status: 'available',
     summary:
-      'The solar system under Newton’s inverse-square law and Kepler’s laws — an extraordinarily successful model for centuries.',
+      'The solar system under Newton’s inverse-square law and Kepler’s laws — an extraordinarily successful model for centuries. Force points to the Sun; velocity is (nearly) tangent; periods obey T² ∝ a³.',
     whatWeShow: [
       'Sun and planets on orbital paths',
-      'Periods and distances',
-      'Force / velocity vectors (planned)',
+      'Velocity (green) and force/acceleration (red) vectors',
+      'Period and semi-major axis labels; Kepler T²/a³ check',
+      'Planet tour with focus + Newtonian readouts',
     ],
-    equations: ['F = G m₁ m₂ / r²', 'T² ∝ a³ (Kepler III)'],
+    equations: ['F = G m₁ m₂ / r²', 'a = GM / r²', 'T² ∝ a³ (Kepler III)'],
     verified:
       'Planetary motions to high accuracy for most purposes; foundation of classical celestial mechanics.',
+    honestyNote:
+      'Orbits here are circular Keplerian (visual). Real planets have small eccentricities; N-body perturbations are deferred.',
     demoIds: ['D4', 'D5'],
+    howToExplore: [
+      'Toggle Velocity / Force vectors on the HUD.',
+      'Tour planets — check that T²/a³ ≈ 1 for each.',
+      'Speed up time; double-click a planet to center the camera.',
+      'Next chapter: free sandbox for inverse-square experiments.',
+    ],
   },
   {
     id: 'gravity-sandbox',
@@ -82,13 +91,26 @@ export const CHAPTERS: Chapter[] = [
     title: 'Gravity pull sandbox',
     shortTitle: '3 · Sandbox',
     model: 'Newtonian toy model',
-    status: 'planned',
+    status: 'available',
     summary:
-      'Hands-on inverse-square intuition: place masses, launch test particles, and feel how gravity falls off with distance.',
-    whatWeShow: ['Interactive masses', 'Trails and orbits', 'Escape velocity experiments'],
-    equations: ['a = GM / r²', 'v_esc = √(2GM / r)'],
+      'Hands-on inverse-square intuition: place masses, launch test particles, watch trails, and compare speed to escape velocity. Toy units — the shape of the law matters, not SI constants.',
+    whatWeShow: [
+      'Central mass + orbiting test body',
+      'Place extra masses or particles on the plane',
+      'Trails, force vectors, adjustable G',
+      'Escape-speed comparison for the selection',
+    ],
+    equations: ['a = GM / r²', 'v_esc = √(2GM / r)', 'F = G m₁ m₂ / r²'],
     verified: 'Pedagogical verification of inverse-square behavior (toy parameters allowed).',
+    honestyNote:
+      'Sandbox uses soft-softened gravity and semi-implicit Euler. Stable orbits are approximate; this is for intuition, not orbital mechanics homework precision.',
     demoIds: ['D6'],
+    howToExplore: [
+      'Watch the default orbiter; toggle Force and Trails.',
+      'Speed up until |v| > v_esc — path opens (escape).',
+      'Place a test particle; try different G values.',
+      'When ready, continue to Mercury — where Newton is almost perfect… but not quite.',
+    ],
   },
   {
     id: 'mercury-anomaly',

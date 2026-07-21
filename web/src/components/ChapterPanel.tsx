@@ -112,14 +112,14 @@ export function ChapterPanel() {
 
       {chapter.status !== 'available' && (
         <section className={styles.scaffold}>
-          Demo status: <strong>{chapter.status}</strong>. Solar system viewport is live;
-          chapter-specific interactions arrive in later iterations (see PLAN.md).
+          Demo status: <strong>{chapter.status}</strong>. Interactive labs arrive in later
+          iterations (see PLAN.md).
         </section>
       )}
 
-      {isEarth && chapter.status === 'available' && (
+      {chapter.status === 'available' && (
         <section className={styles.ready}>
-          Chapter 1 lab is interactive — use the bottom HUD on the viewport.
+          Interactive chapter — use the bottom HUD on the viewport when shown.
         </section>
       )}
 

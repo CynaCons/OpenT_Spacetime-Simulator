@@ -22,28 +22,65 @@ const SHIP_MAST_KM = 0.025
 /** Everest ground range from observer (km). */
 export const EVEREST_DISTANCE_KM = 220
 
-function ShipMesh({ hideHull, hideMid }: { hideHull?: boolean; hideMid?: boolean }) {
+function ShipMesh({
+  hideHull,
+  hideMid,
+  /** Whole ship ghosted when occluded by curvature (still drawn). */
+  occluded = false,
+}: {
+  hideHull?: boolean
+  hideMid?: boolean
+  occluded?: boolean
+}) {
+  // Partial hide: fade that part; full occlusion: entire ship transparent ghost
+  const hullOp = occluded ? 0.22 : hideHull ? 0.2 : 1
+  const midOp = occluded ? 0.22 : hideMid ? 0.22 : 1
+  const mastOp = occluded ? 0.28 : 1
+  const ghost = occluded || hideHull
+
   return (
     <group>
-      {!hideHull && (
-        <mesh position={[0, 0.05, 0]}>
-          <boxGeometry args={[0.3, 0.075, 0.11]} />
-          <meshStandardMaterial color="#d8e2f0" metalness={0.25} roughness={0.45} />
-        </mesh>
-      )}
-      {!hideMid && (
-        <mesh position={[0, 0.11, 0]}>
-          <boxGeometry args={[0.13, 0.075, 0.085]} />
-          <meshStandardMaterial color="#8aa4c8" />
-        </mesh>
-      )}
+      <mesh position={[0, 0.05, 0]}>
+        <boxGeometry args={[0.3, 0.075, 0.11]} />
+        <meshStandardMaterial
+          color={ghost ? '#9aa8b8' : '#d8e2f0'}
+          metalness={0.25}
+          roughness={0.45}
+          transparent
+          opacity={hullOp}
+          depthWrite={hullOp > 0.9}
+        />
+      </mesh>
+      <mesh position={[0, 0.11, 0]}>
+        <boxGeometry args={[0.13, 0.075, 0.085]} />
+        <meshStandardMaterial
+          color={ghost ? '#7a8a9e' : '#8aa4c8'}
+          transparent
+          opacity={midOp}
+          depthWrite={midOp > 0.9}
+        />
+      </mesh>
       <mesh position={[0, 0.2, 0]}>
         <cylinderGeometry args={[0.012, 0.014, 0.18, 8]} />
-        <meshStandardMaterial color="#f0b429" emissive="#f0b429" emissiveIntensity={0.3} />
+        <meshStandardMaterial
+          color="#f0b429"
+          emissive="#f0b429"
+          emissiveIntensity={occluded ? 0.08 : 0.3}
+          transparent
+          opacity={mastOp}
+          depthWrite={mastOp > 0.9}
+        />
       </mesh>
       <mesh position={[0, 0.3, 0]}>
         <sphereGeometry args={[0.028, 8, 8]} />
-        <meshStandardMaterial color="#ff6b6b" emissive="#ff6b6b" emissiveIntensity={0.45} />
+        <meshStandardMaterial
+          color="#ff6b6b"
+          emissive="#ff6b6b"
+          emissiveIntensity={occluded ? 0.1 : 0.45}
+          transparent
+          opacity={mastOp}
+          depthWrite={mastOp > 0.9}
+        />
       </mesh>
     </group>
   )
@@ -245,20 +282,15 @@ export function ShipHorizonDemo() {
   useFrame((_, dt) => {
     earthLabStore.tickShip(dt)
     const { shipDistanceKm: d, shapeModel: model } = earthLabStore.getState()
-    const hideNow = shipHideFraction(d, OBSERVER_HEIGHT_KM, SHIP_MAST_KM)
 
     if (shipRef.current) {
+      // Always keep the ship drawn; occlusion is shown via transparency (not removal).
       if (model === 'sphere') {
-        let sink = 0
-        if (hideNow.hull) sink += 0.04
-        if (hideNow.mid) sink += 0.05
-        if (hideNow.fullyGone) sink += 0.2
-        placeOnSphere(shipRef.current, d, sink)
-        shipRef.current.visible = !hideNow.fullyGone
+        placeOnSphere(shipRef.current, d, 0)
       } else {
         placeOnFlat(shipRef.current, d, 0.02)
-        shipRef.current.visible = true
       }
+      shipRef.current.visible = true
     }
 
     if (everestRef.current) {
@@ -353,40 +385,29 @@ export function ShipHorizonDemo() {
         gapSize={0.07}
       />
 
-      {/* Ship */}
+      {/* Ship — stays in place; fades when curvature hides it from the eye */}
       <group ref={shipRef}>
         <ShipMesh
-          hideHull={shapeModel === 'sphere' && hide.hull}
-          hideMid={shapeModel === 'sphere' && hide.mid}
+          hideHull={shapeModel === 'sphere' && hide.hull && !hide.fullyGone}
+          hideMid={shapeModel === 'sphere' && hide.mid && !hide.fullyGone}
+          occluded={shapeModel === 'sphere' && hide.fullyGone}
         />
         <Html distanceFactor={7} position={[0.14, 0.34, 0]} style={{ pointerEvents: 'none' }}>
           <div
             style={labelStyle(
-              shapeModel === 'sphere' && hide.hull ? '#f07178' : '#e8eefc',
+              shapeModel === 'sphere' && (hide.hull || hide.fullyGone) ? '#f07178' : '#e8eefc',
             )}
           >
             Ship · {shipDistanceKm.toFixed(0)} km
             {shapeModel === 'sphere' && hide.hull && !hide.fullyGone
               ? ' · hull under horizon'
               : ''}
-            {shapeModel === 'sphere' && hide.fullyGone ? ' · gone behind curve' : ''}
+            {shapeModel === 'sphere' && hide.fullyGone
+              ? ' · transparent (occluded by curve)'
+              : ''}
           </div>
         </Html>
       </group>
-
-      {shapeModel === 'sphere' && hide.fullyGone && (
-        <Html
-          position={[
-            Math.sin(surfaceKmToTeachingAngle(shipDistanceKm)) * EARTH_RADIUS_SCENE * 1.03,
-            Math.cos(surfaceKmToTeachingAngle(shipDistanceKm)) * EARTH_RADIUS_SCENE * 1.03,
-            0,
-          ]}
-          distanceFactor={10}
-          style={{ pointerEvents: 'none' }}
-        >
-          <div style={labelStyle('#f07178')}>Occluded by Earth&apos;s curve</div>
-        </Html>
-      )}
 
       {/* Everest */}
       <group ref={everestRef}>

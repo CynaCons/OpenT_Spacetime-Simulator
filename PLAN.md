@@ -2,7 +2,7 @@
 
 **Living plan.** Update this file as tasks and subtasks complete.  
 **Last updated:** 2026-07-21  
-**Current phase:** Phase 2 — Earth is not flat (v1 mature — shipping)  
+**Current phase:** Phase 3 — Newton + gravity sandbox (v1)  
 
 ---
 
@@ -23,7 +23,7 @@
 Phase 0  Project init (docs, repo, tooling)           [x]
 Phase 1  App shell + 3D solar system foundation       [x] (scale modes / Moon optional later)
 Phase 2  Chapter 1 — Earth is not flat                [x] v1 mature
-Phase 3  Chapters 2–3 — Newton + gravity sandbox      [ ]
+Phase 3  Chapters 2–3 — Newton + gravity sandbox      [x] v1
 Phase 4  Chapter 4 — Mercury / limits of Newton       [ ]
 Phase 5  Chapter 5 — Special Relativity               [ ]
 Phase 6  Chapter 6 — GR geodesics                     [ ]
@@ -235,37 +235,37 @@ web/src/
 ## Phase 3 — Chapters 2–3: Newtonian gravity + sandbox
 
 **Goal:** Show Newtonian model of the solar system and build intuition for inverse-square gravity.  
-**Status:** `[ ]` Pending  
-**Depends on:** Phase 1 (can parallelize content with Phase 2)  
+**Status:** `[x]` **v1** (2026-07-21)  
+**Depends on:** Phase 1  
 
 ### Sub-iterations
 
 #### 3.1 — Newtonian orbit engine
-- [ ] Integrate semi-major axes, periods (Keplerian first)  
-- [ ] Optional: simple symplectic N-body for Sun-dominated system  
-- [ ] Toggle force vectors / velocity vectors  
-- [ ] Display \( F = G m_1 m_2 / r^2 \) and Kepler \( T^2 \propto a^3 \)  
+- [x] Keplerian circular solar system (existing) + μ helpers  
+- [ ] Optional: full symplectic N-body (later)  
+- [x] Toggle force vectors / velocity vectors  
+- [x] Display \( F = G m_1 m_2 / r^2 \) and Kepler \( T^2 \propto a^3 \)  
 
 #### 3.2 — Solar system under Newton (Chapter 2)
-- [ ] Guided tour: focus each planet, period, distance  
-- [ ] Compare circular vs eccentric orbit visualization  
-- [ ] “What Newton assumes” panel (absolute time, inverse square, etc.)  
+- [x] Guided tour: focus each planet, period, distance  
+- [ ] Eccentric orbits toggle (backlog)  
+- [x] Newton HUD + chapter content  
 
 #### 3.3 — Gravity pull sandbox (Chapter 3)
-- [ ] Empty space + place masses  
-- [ ] Drag to set velocity; trail paths  
-- [ ] Adjust G or masses for pedagogy (flag “toy mode”)  
-- [ ] Escape velocity experiment  
-- [ ] Two-body orbit creation challenge  
+- [x] Central mass + orbiting body  
+- [x] Place masses / test particles  
+- [x] Trails, adjustable G, force vectors  
+- [x] Escape velocity readout + nudge  
+- [ ] Drag-to-aim velocity gizmo (polish)  
 
 #### 3.4 — Content & equations
-- [ ] Clear derivation-level explanation of inverse square (qualitative + formula)  
-- [ ] Link forward: “this works almost perfectly… until Mercury”  
+- [x] Inverse-square + Kepler copy  
+- [x] Link forward to Mercury chapter  
 
 ### Acceptance criteria
-- Solar system runs under Newtonian/Keplerian model with readable equations  
-- Sandbox lets user create stable-ish orbits and feel \(1/r^2\)  
-- No critical errors under high time acceleration (clamp if needed)  
+- [x] Solar system Newtonian tour with vectors + Kepler check  
+- [x] Sandbox place/trails/escape  
+- [x] Build OK  
 
 ---
 
@@ -465,9 +465,9 @@ These run alongside phases as needed.
 | D1 | Globe vs flat Earth | 1 | 2 | `[x]` v1 (toggle) |
 | D2 | Horizon / ship curvature | 1 | 2 | `[x]` v1 |
 | D3 | Latitude / Sun / Eratosthenes | 1 | 2 | `[ ]` |
-| D4 | Newtonian solar system tour | 2 | 3 | `[~]` base solar system live |
-| D5 | Force/velocity vectors | 2–3 | 3 | `[ ]` |
-| D6 | Gravity pull sandbox | 3 | 3 | `[ ]` |
+| D4 | Newtonian solar system tour | 2 | 3 | `[x]` v1 |
+| D5 | Force/velocity vectors | 2–3 | 3 | `[x]` v1 |
+| D6 | Gravity pull sandbox | 3 | 3 | `[x]` v1 |
 | D7 | Mercury perihelion anomaly | 4 | 4 | `[ ]` |
 | D8 | Light clock (SR) | 5 | 5 | `[ ]` |
 | D9 | Length contraction / simultaneity | 5 | 5 | `[ ]` |
@@ -498,8 +498,9 @@ These run alongside phases as needed.
 1. [x] Camera zoom/orbit center controls  
 2. [x] GitHub repo + Pages  
 3. [x] **Phase 2 v1 mature:** Earth lab + rocket + flat compare + ship  
-4. [ ] Optional Ch.1 polish: terminator, Eratosthenes, source links  
-5. [ ] **Phase 3:** Newton + gravity sandbox  
+4. [x] Ship occluded → transparent (not removed)  
+5. [x] **Phase 3 v1:** Newton tour + gravity sandbox  
+6. [ ] **Phase 4:** Mercury perihelion anomaly  
 
 ---
 
@@ -512,6 +513,7 @@ These run alongside phases as needed.
 | 2026-07-21 | **Chapter 1 v1 mature:** EarthLabScene, rocket ascent (sphere/flat, teaching scale, horizon guide, dip/distance readouts), ship/horizon demo, full panel content, status `available`. Build + browser smoke OK. |
 | 2026-07-21 | Earth lab camera: always-on OrbitControls; Horizon/Down are snap presets; drag frees camera; orbit target follows rocket. |
 | 2026-07-21 | Ship lab overhaul: teaching arc so ships follow curvature; hull/mid/mast drop; Everest + mutual visibility rings; FOV wedge & horizon tangent. |
+| 2026-07-21 | Ship occluded → transparent ghost. Phase 3 v1: Newton vectors/tour + gravity sandbox (place, trails, G, escape). |
 
 ---
 
