@@ -94,9 +94,11 @@ Open the URL Vite prints (default `http://localhost:5173`).
 
 ## Status
 
-**Phase 0–1:** app shell, chapter navigation, navigable solar system, camera center controls, GitHub Pages deploy pipeline.
+**Phase 0–1:** app shell, solar system, camera centers, GitHub Pages.
 
-**Next:** Phase 2 — *Earth is not flat* (including rocket ascent / curvature reveal). See [PLAN.md](./PLAN.md).
+**Phase 2 (Chapter 1) — mature v1:** dedicated Earth lab with **rocket ascent** (sphere vs flat), horizon geometry readouts, teaching scale, and **ship/horizon** demo. See [PLAN.md](./PLAN.md).
+
+**Next:** Phase 3 — Newtonian solar system tour + gravity sandbox.
 
 ---
 

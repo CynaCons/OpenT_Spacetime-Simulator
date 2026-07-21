@@ -1,12 +1,14 @@
 import { Canvas } from '@react-three/fiber'
 import { ChapterPanel } from '../components/ChapterPanel'
+import { EarthLabHud } from '../components/EarthLabHud'
 import { TopBar } from '../components/TopBar'
 import { CameraRig } from '../scenes/CameraRig'
+import { EarthLabScene } from '../scenes/earth/EarthLabScene'
 import { SolarSystemScene } from '../scenes/SolarSystemScene'
 import { useSimulation } from '../state/simulationStore'
 import styles from './App.module.css'
 
-function CameraHint() {
+function SolarHint() {
   const focusMode = useSimulation((s) => s.focusMode)
   const focusBodyId = useSimulation((s) => s.focusBodyId)
   const centerLabel =
@@ -26,7 +28,19 @@ function CameraHint() {
   )
 }
 
+function EarthHint() {
+  return (
+    <div className={styles.hint}>
+      Chapter 1 Earth lab · Toggle <strong>Sphere</strong> vs <strong>Flat</strong> · Scrub altitude or
+      launch · Compare curvature
+    </div>
+  )
+}
+
 export function App() {
+  const chapterId = useSimulation((s) => s.chapterId)
+  const isEarthLab = chapterId === 'earth-not-flat'
+
   return (
     <div className={styles.app}>
       <TopBar />
@@ -34,14 +48,32 @@ export function App() {
         <ChapterPanel />
         <div className={styles.viewport}>
           <Canvas
-            camera={{ position: [0, 28, 42], fov: 45, near: 0.1, far: 2000 }}
+            key={isEarthLab ? 'earth-lab' : 'solar'}
+            camera={
+              isEarthLab
+                ? { position: [0, 7, 4], fov: 50, near: 0.05, far: 500 }
+                : { position: [0, 28, 42], fov: 45, near: 0.1, far: 2000 }
+            }
             dpr={[1, 2]}
             gl={{ antialias: true }}
           >
-            <SolarSystemScene />
-            <CameraRig />
+            {isEarthLab ? (
+              <EarthLabScene />
+            ) : (
+              <>
+                <SolarSystemScene />
+                <CameraRig />
+              </>
+            )}
           </Canvas>
-          <CameraHint />
+          {isEarthLab ? (
+            <>
+              <EarthLabHud />
+              <EarthHint />
+            </>
+          ) : (
+            <SolarHint />
+          )}
         </div>
       </div>
     </div>

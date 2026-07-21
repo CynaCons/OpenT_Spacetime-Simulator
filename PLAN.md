@@ -2,7 +2,7 @@
 
 **Living plan.** Update this file as tasks and subtasks complete.  
 **Last updated:** 2026-07-21  
-**Current phase:** Phase 2 — Earth is not flat (next)  
+**Current phase:** Phase 2 — Earth is not flat (v1 mature — shipping)  
 
 ---
 
@@ -22,7 +22,7 @@
 ```
 Phase 0  Project init (docs, repo, tooling)           [x]
 Phase 1  App shell + 3D solar system foundation       [x] (scale modes / Moon optional later)
-Phase 2  Chapter 1 — Earth is not flat                [ ] next
+Phase 2  Chapter 1 — Earth is not flat                [x] v1 mature
 Phase 3  Chapters 2–3 — Newton + gravity sandbox      [ ]
 Phase 4  Chapter 4 — Mercury / limits of Newton       [ ]
 Phase 5  Chapter 5 — Special Relativity               [ ]
@@ -138,88 +138,97 @@ Each phase below is a **sub-iteration** with deliverables, acceptance criteria, 
 ## Phase 2 — Chapter 1: Earth is not flat
 
 **Goal:** Interactive geometric evidence that Earth is a sphere (oblate spheroid noted).  
-**Status:** `[ ]` Pending — **next iteration**  
+**Status:** `[x]` **v1 mature** (2026-07-21)  
 **Depends on:** Phase 1  
 
 ### Design thesis (rocket altitude / curvature)
 
-If Earth were a flat disk, climbing higher in a small rocket would just show a larger flat plane (horizon stays “level” in a way that doesn’t match a globe).  
+If Earth were a flat disk, climbing higher in a small rocket would just show a larger flat plane.  
 On a **sphere**, as altitude increases:
 
 1. The **horizon drops** below eye level (geometric dip of the horizon).  
 2. A larger fraction of the surface becomes visible, and the **limb becomes curved**.  
-3. Eventually you see a **whole-disk Earth** — impossible on a simple infinite/flat plane model with the same local “up”.
+3. Eventually you see a **whole-disk Earth** — not what a flat plane with the same local “up” predicts.
 
-**How we integrate this in the simulator (recommended):**
+**Integration in the simulator:**
 
-Leave the full solar-system scene for other chapters. For Chapter 1, switch the viewport to a dedicated **Earth lab scene** (sphere vs flat), with the rocket as a first-person / third-person altitude scrubber.
+Chapter 1 switches the viewport to a dedicated **Earth lab** (`EarthLabScene`), not the full solar system. Rocket + ship sub-demos share sphere/flat model toggle.
 
 | Mode | What the user does | What they see |
 |------|--------------------|---------------|
-| **Sphere Earth** | Launch / altitude slider 0 → ~400 km (and beyond for drama) | Horizon curves; Earth limb rounds; night side / terminator optional |
-| **Flat disk** | Same altitude path, same camera rules | Plane stays flat; horizon behavior fails to match globe photos / intuition |
-| **Split / A-B toggle** | Flip model mid-flight | Instant comparison with identical rocket path |
-
-Implementation notes:
-
-- **Exaggerated curvature at low altitude is OK for pedagogy** if labeled (real curvature is subtle until high altitude). Offer “true scale feel” vs “teaching exaggeration” toggle.  
-- Rocket can be a simple mesh + altitude animation (not full aerodynamics).  
-- Camera: attach to rocket looking slightly down-horizon, or free look with locked altitude.  
-- Optional second beat: **surface horizon / ship** (object disappearing hull-first) — same chapter, different sub-demo.  
-- Keep tone geometric and observational; models + “what this verifies” panel.
+| **Sphere Earth** | Launch / altitude slider 0 → 2000 km | Limb curves; horizon guide dips; globe fills view |
+| **Flat disk** | Same altitude path | Plane stays flat; gold rim is disk edge only |
+| **A-B toggle** | Flip model mid-flight | Instant comparison with identical rocket path |
 
 ### Sub-iterations
 
 #### 2.0 — Chapter scene switcher (platform)
-- [ ] When chapter = `earth-not-flat`, load `EarthLabScene` instead of full solar system  
-- [ ] Sub-demo tabs inside chapter: Rocket ascent · Horizon/ship · (later Eratosthenes)  
-- [ ] Reuse camera center patterns where useful (focus launch site / free look)
+- [x] When chapter = `earth-not-flat`, load `EarthLabScene` instead of full solar system  
+- [x] Sub-demo tabs: Rocket ascent · Ship/horizon  
+- [x] HUD + chapter panel + top-bar shortcuts  
+- [x] Free orbit look mode on rocket demo  
 
 #### 2.1 — Globe Earth scene
-- [ ] Textured or stylized Earth sphere (continents readable)  
-- [ ] Axial tilt optional; day/night terminator  
-- [ ] Latitude/longitude grid toggle  
-- [ ] Camera presets: surface, mid-altitude, orbital  
+- [x] Procedural textured Earth sphere (stylized continents)  
+- [ ] Axial tilt / day-night terminator (polish backlog)  
+- [x] Wireframe grid toggle  
+- [x] Look presets: horizon ride, nadir, orbit free  
 
-#### 2.2 — **Rocket ascent / curvature demo (hero demo)**
-- [ ] Launch site on surface; simple rocket mesh  
-- [ ] Altitude control: scrubber + Play launch  
-- [ ] Camera rides with rocket (look toward horizon / nadir toggle)  
-- [ ] Overlay readouts: altitude (km), approximate horizon distance, horizon dip angle  
-- [ ] Visual cues: horizon line, limb curve highlight  
-- [ ] Equation/geometry panel: horizon distance ≈ √(2Rh + h²) for sphere  
+#### 2.2 — **Rocket ascent / curvature demo (hero)**
+- [x] Launch site + simple rocket mesh  
+- [x] Altitude scrubber + Launch animation  
+- [x] Camera rides with rocket (horizon / down / orbit)  
+- [x] Readouts: altitude, horizon distance, horizon dip  
+- [x] Gold horizon guide ring  
+- [x] Equations in side panel: √(2Rh+h²), dip  
 
 #### 2.3 — Flat model comparison
-- [ ] Flat-disk representation with same map texture  
-- [ ] Same rocket altitude path on flat model  
-- [ ] Side-by-side or toggle: sphere vs flat  
-- [ ] Callouts: what matches everyday ground intuition vs what fails at altitude  
+- [x] Flat-disk with same procedural map texture  
+- [x] Same rocket altitude path on flat model  
+- [x] Toggle sphere vs flat  
+- [x] HUD callouts for model mismatch  
 
 #### 2.4 — Horizon / ship demo (supporting)
-- [ ] Object receding over curved horizon (hull-first)  
-- [ ] Distance slider + observer height  
-- [ ] Flat model fails (object shrinks but doesn’t hull-hide the same way)
+- [x] Ship recedes; beyond horizon on sphere  
+- [x] Distance slider + sail animation  
+- [x] Flat model: ship stays visible (shrinks only)  
 
-#### 2.5 — Latitude / Sun elevation (optional in this phase)
+#### 2.5 — Latitude / Sun elevation (optional — backlog)
 - [ ] Sun angle at different latitudes same date  
 - [ ] Optional Eratosthenes stick-shadow interactive  
 
 #### 2.6 — Chapter content
-- [ ] Equations/geometry notes (circumference, horizon distance)  
-- [ ] Honesty note: Earth is oblate spheroid; atmosphere / refraction mentioned  
-- [ ] Sources / further reading  
-- [ ] “What was verified” checklist  
+- [x] Equations / geometry notes  
+- [x] Honesty note: oblate spheroid; refraction; teaching scale  
+- [ ] Sources / further reading links (nice-to-have)  
+- [x] “What was verified” + how-to-explore steps  
+- [x] Chapter status → `available`  
 
 ### Acceptance criteria
-- User can launch (or scrub) a rocket and **see curvature develop with altitude** on the sphere model  
-- User can run the **same flight on a flat model** and see the qualitative mismatch  
-- Side panel explains model, geometry, and what observation verifies  
-- No critical console errors; works on GitHub Pages build  
+- [x] User can launch/scrub rocket and see curvature cues on sphere  
+- [x] Same flight on flat model shows qualitative mismatch  
+- [x] Side panel explains model, geometry, verification  
+- [x] Build passes; browser smoke for Ch.1  
 
-### Out of scope for Phase 2
+### Out of scope for Phase 2 v1
 - Full orbital mechanics of the rocket  
-- Debunking every flat-Earth claim (stay on geometry demos)  
-- Photoreal ISS footage (stylized 3D is enough)  
+- Debunking every flat-Earth claim  
+- Photoreal ISS footage  
+- Eratosthenes (deferred 2.5)  
+
+### Code map (Chapter 1)
+```
+web/src/
+  physics/earthGeometry.ts
+  state/earthLabStore.ts
+  scenes/earth/
+    EarthLabScene.tsx
+    RocketAscentDemo.tsx
+    ShipHorizonDemo.tsx
+    EarthMeshes.tsx
+    createEarthTexture.ts
+  components/EarthLabHud.tsx
+```  
 
 ---
 
@@ -452,9 +461,9 @@ These run alongside phases as needed.
 
 | # | Demo | Chapter | Phase | Status |
 |---|------|---------|-------|--------|
-| D0 | Rocket ascent / altitude curvature (hero) | 1 | 2 | `[ ]` planned |
-| D1 | Globe vs flat Earth | 1 | 2 | `[ ]` |
-| D2 | Horizon / ship curvature | 1 | 2 | `[ ]` |
+| D0 | Rocket ascent / altitude curvature (hero) | 1 | 2 | `[x]` v1 |
+| D1 | Globe vs flat Earth | 1 | 2 | `[x]` v1 (toggle) |
+| D2 | Horizon / ship curvature | 1 | 2 | `[x]` v1 |
 | D3 | Latitude / Sun / Eratosthenes | 1 | 2 | `[ ]` |
 | D4 | Newtonian solar system tour | 2 | 3 | `[~]` base solar system live |
 | D5 | Force/velocity vectors | 2–3 | 3 | `[ ]` |
@@ -486,11 +495,11 @@ These run alongside phases as needed.
 
 ## Immediate next actions
 
-1. [x] Camera zoom/orbit center controls (Sun, Earth, Selected, Free, Reset view)  
-2. [x] GitHub repo + Pages workflow + README live link  
-3. [ ] **Phase 2.0–2.3:** Earth lab scene + rocket ascent curvature (hero) + flat comparison  
-4. [ ] Phase 2.4+: horizon/ship, optional Eratosthenes  
-5. [ ] Phase 3: Newton + gravity sandbox  
+1. [x] Camera zoom/orbit center controls  
+2. [x] GitHub repo + Pages  
+3. [x] **Phase 2 v1 mature:** Earth lab + rocket + flat compare + ship  
+4. [ ] Optional Ch.1 polish: terminator, Eratosthenes, source links  
+5. [ ] **Phase 3:** Newton + gravity sandbox  
 
 ---
 
@@ -500,6 +509,7 @@ These run alongside phases as needed.
 |------|--------|
 | 2026-07-21 | Project initiated. PRD.md + PLAN.md created. Scaffolded `web/` (Vite/React/TS/R3F). App shell + circular Kepler solar system + 7 chapter placeholders. Build OK; browser smoke OK (no critical console errors). Phase 0 complete; Phase 1 largely done. |
 | 2026-07-21 | Camera center controls (Sun/Earth/Selected/Free, double-click focus, RMB pan). GitHub Pages workflow + README. Phase 2 plan expanded with rocket-altitude curvature demo as Chapter 1 hero. |
+| 2026-07-21 | **Chapter 1 v1 mature:** EarthLabScene, rocket ascent (sphere/flat, teaching scale, horizon guide, dip/distance readouts), ship/horizon demo, full panel content, status `available`. Build + browser smoke OK. |
 
 ---
 

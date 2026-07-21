@@ -73,6 +73,56 @@
   line-height: 1.45;
 }
 
+.chipRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.45rem;
+}
+
+.chip,
+.chipActive,
+.chipWarn {
+  border: 1px solid var(--border);
+  background: #101a2e;
+  border-radius: 999px;
+  padding: 0.25rem 0.6rem;
+  font-size: 0.75rem;
+}
+
+.chipActive {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+}
+
+.chipWarn {
+  background: #3a2810;
+  border-color: var(--warning);
+  color: #ffe6b0;
+}
+
+.steps {
+  margin: 0;
+  padding-left: 1.15rem;
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.steps li {
+  margin-bottom: 0.35rem;
+}
+
+.ready {
+  margin-top: 1rem;
+  padding: 0.65rem 0.75rem;
+  border-radius: var(--radius);
+  border: 1px solid #1e4a35;
+  background: #0c1a14;
+  color: #9de0b8;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
 .nav {
   display: flex;
   gap: 0.5rem;

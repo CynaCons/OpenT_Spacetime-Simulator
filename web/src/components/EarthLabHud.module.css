@@ -1,0 +1,125 @@
+.hud {
+  position: absolute;
+  left: 0.75rem;
+  right: 0.75rem;
+  bottom: 2.6rem;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  max-width: 520px;
+  padding: 0.65rem 0.75rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: #0a1220e6;
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow);
+  pointer-events: auto;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  min-width: 2.8rem;
+}
+
+.hud button {
+  border: 1px solid var(--border);
+  background: #101a2e;
+  border-radius: 7px;
+  padding: 0.28rem 0.55rem;
+  font-size: 0.78rem;
+}
+
+.hud button:hover {
+  border-color: var(--accent);
+}
+
+.active {
+  background: var(--accent-soft) !important;
+  border-color: var(--accent) !important;
+  color: #fff;
+}
+
+.activeFlat {
+  background: #3a2810 !important;
+  border-color: var(--warning) !important;
+  color: #ffe6b0;
+}
+
+.sliderBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.sliderHeader {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.sliderHeader strong {
+  color: var(--text);
+  font-family: var(--mono);
+  font-weight: 600;
+}
+
+.sliderBlock input[type='range'] {
+  width: 100%;
+  accent-color: var(--accent);
+}
+
+.readouts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.35rem 0.75rem;
+  font-size: 0.78rem;
+}
+
+.readouts > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.k {
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.v {
+  font-family: var(--mono);
+  color: var(--text);
+}
+
+.modelTag {
+  grid-column: 1 / -1;
+  margin-top: 0.15rem;
+  padding: 0.4rem 0.5rem;
+  border-radius: 6px;
+  background: #0c1628;
+  border: 1px solid var(--border);
+  color: #c5d4f0;
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+
+@media (max-width: 900px) {
+  .hud {
+    max-width: none;
+    bottom: 2.4rem;
+  }
+}

@@ -1,6 +1,5 @@
 /**
  * Chapter content schema for the guided story arc.
- * Full pedagogical copy lands in later phases; placeholders unlock navigation now.
  */
 
 export type ChapterStatus = 'available' | 'scaffold' | 'planned'
@@ -18,6 +17,8 @@ export interface Chapter {
   verified: string
   honestyNote?: string
   demoIds: string[]
+  /** Extra teaching bullets shown in the panel when present */
+  howToExplore?: string[]
 }
 
 export const CHAPTERS: Chapter[] = [
@@ -27,24 +28,32 @@ export const CHAPTERS: Chapter[] = [
     title: 'Earth is not flat',
     shortTitle: '1 · Sphere',
     model: 'Geometry & observation',
-    status: 'scaffold',
+    status: 'available',
     summary:
-      'Interactive geometric evidence that Earth is a sphere (more precisely an oblate spheroid). Compare globe and flat models against the same observations.',
+      'Launch a small rocket and watch how the horizon behaves. On a sphere, the limb curves and the horizon dips as you climb. On a flat disk with the same flight, the world stays a plane — the two models make different predictions you can see side by side.',
     whatWeShow: [
-      'Rocket ascent: watch the horizon curve with altitude (planned)',
-      'Same flight on a flat-disk model for comparison (planned)',
-      'Globe Earth with day/night terminator (planned)',
-      'Horizon / ship disappearance (planned)',
+      'Rocket ascent with altitude scrubber and auto-launch',
+      'Sphere Earth vs flat-disk model (same rocket path)',
+      'Horizon distance and dip readouts from sphere geometry',
+      'Ship sailing away: hull hides behind the curve on a sphere',
+      'Teaching scale vs near-true vertical scale',
     ],
     equations: [
-      'C = 2πR (circumference)',
-      'Horizon distance ≈ √(2 R h + h²) (sphere)',
-      'Horizon dip increases with observer height',
+      'd_horizon ≈ √(2 R h + h²)',
+      'cos(dip) = R / (R + h)',
+      'C = 2 π R  (circumference)',
     ],
-    verified: 'Shape of Earth from geometry, horizons, and multi-latitude solar observations.',
+    verified:
+      'Observer geometry: horizon distance and dip grow with height only if the surface curves away. Whole-disk views from altitude match a globe, not a flat plane under the same local “up.”',
     honestyNote:
-      'Demos use a sphere for clarity; real Earth is an oblate spheroid. Atmosphere and refraction affect real horizons slightly.',
-    demoIds: ['D0', 'D1', 'D2', 'D3'],
+      'Earth is an oblate spheroid (not a perfect sphere). Atmosphere and refraction shift real horizons slightly. “Teaching scale” exaggerates height so curvature is obvious in a short session — toggle near-true scale to feel how subtle low-altitude curvature is.',
+    demoIds: ['D0', 'D1', 'D2'],
+    howToExplore: [
+      'Start on Sphere Earth, Launch or scrub altitude — watch the gold horizon guide and limb.',
+      'Switch to Flat disk at the same altitude — the guide stays a flat ring; no planetary limb.',
+      'Open Ship / horizon: sail past ~19 km (eye-level horizon) on sphere vs flat.',
+      'Use Orbit free look to inspect the globe after climbing.',
+    ],
   },
   {
     id: 'newtonian-solar-system',
@@ -61,7 +70,8 @@ export const CHAPTERS: Chapter[] = [
       'Force / velocity vectors (planned)',
     ],
     equations: ['F = G m₁ m₂ / r²', 'T² ∝ a³ (Kepler III)'],
-    verified: 'Planetary motions to high accuracy for most purposes; foundation of classical celestial mechanics.',
+    verified:
+      'Planetary motions to high accuracy for most purposes; foundation of classical celestial mechanics.',
     demoIds: ['D4', 'D5'],
   },
   {
@@ -144,7 +154,10 @@ export const CHAPTERS: Chapter[] = [
       'GPS clock corrections & map-error accumulation',
       'Proof gallery for further experiments',
     ],
-    equations: ['δ = 4GM / (c² b)  (light deflection)', 'GPS: SR (velocity) + GR (gravitational redshift)'],
+    equations: [
+      'δ = 4GM / (c² b)  (light deflection)',
+      'GPS: SR (velocity) + GR (gravitational redshift)',
+    ],
     verified:
       'GR light deflection (eclipse and modern radio measurements); GNSS systems operationally require relativistic clock models.',
     demoIds: ['D12', 'D13'],
