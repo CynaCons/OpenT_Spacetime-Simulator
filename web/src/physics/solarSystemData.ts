@@ -128,3 +128,20 @@ export const PLANETS: BodyDef[] = [
 export function meanMotion(periodDays: number): number {
   return (Math.PI * 2) / periodDays
 }
+
+export function getPlanetById(id: string): BodyDef | undefined {
+  return PLANETS.find((p) => p.id === id)
+}
+
+/** Heliocentric position in scene units (circular scaffold). */
+export function getBodyPosition(
+  id: string,
+  simDays: number,
+): [number, number, number] {
+  if (id === 'sun') return [0, 0, 0]
+  const body = getPlanetById(id)
+  if (!body) return [0, 0, 0]
+  const r = body.a * AU_SCENE
+  const angle = meanMotion(body.periodDays) * simDays
+  return [Math.cos(angle) * r, 0, Math.sin(angle) * r]
+}

@@ -31,15 +31,20 @@ export const CHAPTERS: Chapter[] = [
     summary:
       'Interactive geometric evidence that Earth is a sphere (more precisely an oblate spheroid). Compare globe and flat models against the same observations.',
     whatWeShow: [
-      'Globe Earth with day/night terminator',
-      'Flat-disk comparison mode',
+      'Rocket ascent: watch the horizon curve with altitude (planned)',
+      'Same flight on a flat-disk model for comparison (planned)',
+      'Globe Earth with day/night terminator (planned)',
       'Horizon / ship disappearance (planned)',
-      'Latitude and solar elevation (planned)',
     ],
-    equations: ['C = 2πR (circumference)', 'Angular size & shadow geometry (Eratosthenes)'],
+    equations: [
+      'C = 2πR (circumference)',
+      'Horizon distance ≈ √(2 R h + h²) (sphere)',
+      'Horizon dip increases with observer height',
+    ],
     verified: 'Shape of Earth from geometry, horizons, and multi-latitude solar observations.',
-    honestyNote: 'Demos use a sphere for clarity; real Earth is an oblate spheroid.',
-    demoIds: ['D1', 'D2', 'D3'],
+    honestyNote:
+      'Demos use a sphere for clarity; real Earth is an oblate spheroid. Atmosphere and refraction affect real horizons slightly.',
+    demoIds: ['D0', 'D1', 'D2', 'D3'],
   },
   {
     id: 'newtonian-solar-system',

@@ -1,9 +1,30 @@
 import { Canvas } from '@react-three/fiber'
-import { OrbitControls } from '@react-three/drei'
 import { ChapterPanel } from '../components/ChapterPanel'
 import { TopBar } from '../components/TopBar'
+import { CameraRig } from '../scenes/CameraRig'
 import { SolarSystemScene } from '../scenes/SolarSystemScene'
+import { useSimulation } from '../state/simulationStore'
 import styles from './App.module.css'
+
+function CameraHint() {
+  const focusMode = useSimulation((s) => s.focusMode)
+  const focusBodyId = useSimulation((s) => s.focusBodyId)
+  const centerLabel =
+    focusMode === 'sun'
+      ? 'Sun'
+      : focusMode === 'earth'
+        ? 'Earth (following)'
+        : focusMode === 'body'
+          ? `${focusBodyId ?? 'body'} (following)`
+          : 'Free (pan to move center)'
+
+  return (
+    <div className={styles.hint}>
+      Drag orbit · Scroll zoom · RMB pan = move center · Double-click body to focus · Center:{' '}
+      <strong>{centerLabel}</strong>
+    </div>
+  )
+}
 
 export function App() {
   return (
@@ -18,18 +39,9 @@ export function App() {
             gl={{ antialias: true }}
           >
             <SolarSystemScene />
-            <OrbitControls
-              makeDefault
-              enableDamping
-              dampingFactor={0.08}
-              minDistance={4}
-              maxDistance={500}
-              target={[0, 0, 0]}
-            />
+            <CameraRig />
           </Canvas>
-          <div className={styles.hint}>
-            Drag to orbit · Scroll to zoom · Click a planet to select
-          </div>
+          <CameraHint />
         </div>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import { useFrame } from '@react-three/fiber'
+import { useFrame, type ThreeEvent } from '@react-three/fiber'
 import { Html, Line, Stars } from '@react-three/drei'
 import { useMemo, useRef } from 'react'
 import type { Mesh } from 'three'
@@ -45,15 +45,19 @@ function Planet({
   const z = Math.sin(angle) * r
   const selected = useSimulation((s) => s.selectedBodyId === id)
 
+  const onSelect = (e: ThreeEvent<MouseEvent>) => {
+    e.stopPropagation()
+    simulationStore.selectBody(id)
+  }
+
+  const onFocus = (e: ThreeEvent<MouseEvent>) => {
+    e.stopPropagation()
+    simulationStore.focusBody(id)
+  }
+
   return (
     <group position={[x, 0, z]}>
-      <mesh
-        ref={ref}
-        onClick={(e) => {
-          e.stopPropagation()
-          simulationStore.selectBody(id)
-        }}
-      >
+      <mesh ref={ref} onClick={onSelect} onDoubleClick={onFocus}>
         <sphereGeometry args={[visualRadius, 32, 32]} />
         <meshStandardMaterial
           color={color}
@@ -83,7 +87,16 @@ function Planet({
 function SunBody() {
   return (
     <group>
-      <mesh>
+      <mesh
+        onClick={(e) => {
+          e.stopPropagation()
+          simulationStore.selectBody(null)
+        }}
+        onDoubleClick={(e) => {
+          e.stopPropagation()
+          simulationStore.focusSun()
+        }}
+      >
         <sphereGeometry args={[SUN.visualRadius, 48, 48]} />
         <meshBasicMaterial color={SUN.color} />
       </mesh>

@@ -77,3 +77,16 @@
   margin-left: 0.25rem;
   min-width: 5.5rem;
 }
+
+.groupLabel {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  margin-right: 0.15rem;
+}
+
+.toggles button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}

@@ -12,6 +12,7 @@ export function TopBar() {
   const showOrbits = useSimulation((s) => s.showOrbits)
   const showLabels = useSimulation((s) => s.showLabels)
   const selectedBodyId = useSimulation((s) => s.selectedBodyId)
+  const focusMode = useSimulation((s) => s.focusMode)
 
   return (
     <header className={styles.bar}>
@@ -55,6 +56,50 @@ export function TopBar() {
         <span className={styles.timeReadout} title="Simulated days">
           t ≈ {simDays.toFixed(1)} d
         </span>
+      </div>
+
+      <div className={styles.toggles} role="group" aria-label="Camera focus">
+        <span className={styles.groupLabel}>Center</span>
+        <button
+          type="button"
+          className={focusMode === 'sun' ? styles.active : undefined}
+          onClick={() => simulationStore.focusSun()}
+          title="Orbit around the Sun"
+        >
+          Sun
+        </button>
+        <button
+          type="button"
+          className={focusMode === 'earth' ? styles.active : undefined}
+          onClick={() => simulationStore.focusEarth()}
+          title="Orbit around Earth (follows motion)"
+        >
+          Earth
+        </button>
+        <button
+          type="button"
+          disabled={!selectedBodyId}
+          className={focusMode === 'body' ? styles.active : undefined}
+          onClick={() => selectedBodyId && simulationStore.focusBody(selectedBodyId)}
+          title="Orbit around the selected planet"
+        >
+          Selected
+        </button>
+        <button
+          type="button"
+          className={focusMode === 'free' ? styles.active : undefined}
+          onClick={() => simulationStore.setFreeFocus()}
+          title="Free center — pan with right mouse button, then zoom"
+        >
+          Free
+        </button>
+        <button
+          type="button"
+          onClick={() => simulationStore.resetCamera()}
+          title="Reset camera to default Sun-centered view"
+        >
+          Reset view
+        </button>
       </div>
 
       <div className={styles.toggles}>

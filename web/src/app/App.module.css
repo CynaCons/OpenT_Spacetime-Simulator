@@ -29,14 +29,22 @@
   left: 50%;
   bottom: 0.85rem;
   transform: translateX(-50%);
-  padding: 0.35rem 0.75rem;
+  padding: 0.35rem 0.85rem;
   border-radius: 999px;
   background: #0a1220cc;
   border: 1px solid var(--border);
   color: var(--text-muted);
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   pointer-events: none;
   white-space: nowrap;
+  max-width: min(96vw, 920px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hint strong {
+  color: var(--text);
+  font-weight: 600;
 }
 
 @media (max-width: 900px) {
