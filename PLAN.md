@@ -510,6 +510,7 @@ These run alongside phases as needed.
 | 2026-07-21 | Project initiated. PRD.md + PLAN.md created. Scaffolded `web/` (Vite/React/TS/R3F). App shell + circular Kepler solar system + 7 chapter placeholders. Build OK; browser smoke OK (no critical console errors). Phase 0 complete; Phase 1 largely done. |
 | 2026-07-21 | Camera center controls (Sun/Earth/Selected/Free, double-click focus, RMB pan). GitHub Pages workflow + README. Phase 2 plan expanded with rocket-altitude curvature demo as Chapter 1 hero. |
 | 2026-07-21 | **Chapter 1 v1 mature:** EarthLabScene, rocket ascent (sphere/flat, teaching scale, horizon guide, dip/distance readouts), ship/horizon demo, full panel content, status `available`. Build + browser smoke OK. |
+| 2026-07-21 | Earth lab camera: always-on OrbitControls; Horizon/Down are snap presets; drag frees camera; orbit target follows rocket. |
 
 ---
 

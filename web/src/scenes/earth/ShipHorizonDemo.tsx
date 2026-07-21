@@ -56,39 +56,21 @@ export function ShipHorizonDemo() {
 
     if (model === 'sphere') {
       const p = sphereSurfacePoint(d, EARTH_RADIUS_SCENE)
-      // Ship sits on surface; if beyond geometric horizon from pole observer,
-      // it is occluded by the sphere (we lower it slightly for clear “gone” cue when far).
       const beyond = d > horizonKm
       shipRef.current.position.copy(p)
-      // orient roughly upright
       shipRef.current.lookAt(0, 0, 0)
       shipRef.current.rotateX(-Math.PI / 2)
-      // visual: sink slightly when over horizon (occlusion also hides it behind limb)
       if (beyond) {
         shipRef.current.position.multiplyScalar(0.992)
       }
     } else {
-      // Flat: ship recedes on plane; always above plane, only shrinks with distance
-      const scale = EARTH_RADIUS_SCENE / 500 // km → scene
+      const scale = EARTH_RADIUS_SCENE / 500
       shipRef.current.position.set(d * scale, 0.06, 0)
       shipRef.current.rotation.set(0, 0, 0)
     }
   })
 
-  // Observer camera fixed at north pole / center of flat pad
-  useFrame((state) => {
-    const model = earthLabStore.getState().shapeModel
-    const cam = state.camera
-    if (model === 'sphere') {
-      const eye = EARTH_RADIUS_SCENE + 0.08
-      cam.position.set(0.15, eye, 0.55)
-      // look toward ship direction (+X)
-      cam.lookAt(2.5, EARTH_RADIUS_SCENE * 0.85, 0)
-    } else {
-      cam.position.set(-0.3, 0.35, 1.2)
-      cam.lookAt(2, 0.1, 0)
-    }
-  })
+  // Camera is owned by EarthLabCamera (always orbitable).
 
   const beyond = shipDistanceKm > horizonKm
   const scaleHint = Math.max(0.35, 1 - shipDistanceKm / 500)

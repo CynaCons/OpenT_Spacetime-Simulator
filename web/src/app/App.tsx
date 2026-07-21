@@ -31,8 +31,8 @@ function SolarHint() {
 function EarthHint() {
   return (
     <div className={styles.hint}>
-      Chapter 1 Earth lab · Toggle <strong>Sphere</strong> vs <strong>Flat</strong> · Scrub altitude or
-      launch · Compare curvature
+      <strong>Drag</strong> to orbit · <strong>Scroll</strong> to zoom · RMB pan · Horizon/Down =
+      snap presets (drag frees camera) · Sphere vs Flat
     </div>
   )
 }

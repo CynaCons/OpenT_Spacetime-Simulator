@@ -109,9 +109,16 @@ export function EarthLabHud() {
                 key={m}
                 type="button"
                 className={lookMode === m ? styles.active : undefined}
-                onClick={() => earthLabStore.setLookMode(m)}
+                onClick={() => earthLabStore.setLookMode(m, true)}
+                title={
+                  m === 'horizon'
+                    ? 'Snap to horizon ride (drag anytime to free the camera)'
+                    : m === 'nadir'
+                      ? 'Snap looking down at Earth'
+                      : 'Free orbit — drag to rotate, scroll to zoom'
+                }
               >
-                {m === 'horizon' ? 'Horizon' : m === 'nadir' ? 'Down' : 'Orbit free'}
+                {m === 'horizon' ? 'Horizon' : m === 'nadir' ? 'Down' : 'Free orbit'}
               </button>
             ))}
           </div>

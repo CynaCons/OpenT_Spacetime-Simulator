@@ -2,6 +2,7 @@ import { useSyncExternalStore } from 'react'
 
 export type EarthSubDemo = 'rocket' | 'ship'
 export type EarthShapeModel = 'sphere' | 'flat'
+/** horizon/nadir = snap + soft follow until user drags; orbit = free OrbitControls */
 export type RocketLookMode = 'horizon' | 'nadir' | 'orbit'
 
 export interface EarthLabState {
@@ -19,6 +20,8 @@ export interface EarthLabState {
   /** Ship demo: surface distance from observer (km) */
   shipDistanceKm: number
   shipPlaying: boolean
+  /** Bump to force a camera snap to the current look preset */
+  cameraSnapToken: number
 }
 
 type Listener = () => void
@@ -38,6 +41,7 @@ let state: EarthLabState = {
   showHorizonGuide: true,
   shipDistanceKm: 5,
   shipPlaying: false,
+  cameraSnapToken: 1,
 }
 
 function emit() {
@@ -60,6 +64,8 @@ export const earthLabStore = {
       subDemo,
       launching: false,
       shipPlaying: false,
+      cameraSnapToken: state.cameraSnapToken + 1,
+      lookMode: subDemo === 'ship' ? 'orbit' : state.lookMode,
     }),
   setShapeModel: (shapeModel: EarthShapeModel) => setState({ shapeModel }),
   setAltitudeKm: (altitudeKm: number) =>
@@ -67,7 +73,16 @@ export const earthLabStore = {
   setLaunching: (launching: boolean) => setState({ launching }),
   toggleLaunch: () => setState({ launching: !state.launching }),
   setExaggerated: (exaggerated: boolean) => setState({ exaggerated }),
-  setLookMode: (lookMode: RocketLookMode) => setState({ lookMode }),
+  /**
+   * @param snap when true (default), re-apply the camera preset.
+   *             false = only update mode UI (e.g. user started dragging).
+   */
+  setLookMode: (lookMode: RocketLookMode, snap = true) =>
+    setState({
+      lookMode,
+      cameraSnapToken: snap ? state.cameraSnapToken + 1 : state.cameraSnapToken,
+    }),
+  requestCameraSnap: () => setState({ cameraSnapToken: state.cameraSnapToken + 1 }),
   toggleGrid: () => setState({ showGrid: !state.showGrid }),
   toggleHorizonGuide: () => setState({ showHorizonGuide: !state.showHorizonGuide }),
   setShipDistanceKm: (shipDistanceKm: number) =>
@@ -81,11 +96,11 @@ export const earthLabStore = {
       shipDistanceKm: 5,
       shipPlaying: false,
       lookMode: 'horizon',
+      cameraSnapToken: state.cameraSnapToken + 1,
     }),
   /** Advance rocket altitude during launch (km per real second target). */
   tickLaunch: (dtSec: number) => {
     if (!state.launching) return
-    // ~0 → 400 km in ~12 s, then slower climb
     const rate = state.altitudeKm < 400 ? 35 : 80
     const next = Math.min(MAX_ALT_KM, state.altitudeKm + rate * dtSec)
     if (next >= MAX_ALT_KM) {
