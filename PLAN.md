@@ -511,6 +511,7 @@ These run alongside phases as needed.
 | 2026-07-21 | Camera center controls (Sun/Earth/Selected/Free, double-click focus, RMB pan). GitHub Pages workflow + README. Phase 2 plan expanded with rocket-altitude curvature demo as Chapter 1 hero. |
 | 2026-07-21 | **Chapter 1 v1 mature:** EarthLabScene, rocket ascent (sphere/flat, teaching scale, horizon guide, dip/distance readouts), ship/horizon demo, full panel content, status `available`. Build + browser smoke OK. |
 | 2026-07-21 | Earth lab camera: always-on OrbitControls; Horizon/Down are snap presets; drag frees camera; orbit target follows rocket. |
+| 2026-07-21 | Ship lab overhaul: teaching arc so ships follow curvature; hull/mid/mast drop; Everest + mutual visibility rings; FOV wedge & horizon tangent. |
 
 ---
 

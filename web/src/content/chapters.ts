@@ -34,25 +34,27 @@ export const CHAPTERS: Chapter[] = [
     whatWeShow: [
       'Rocket ascent with altitude scrubber and auto-launch',
       'Sphere Earth vs flat-disk model (same rocket path)',
-      'Horizon distance and dip readouts from sphere geometry',
-      'Ship sailing away: hull hides behind the curve on a sphere',
-      'Teaching scale vs near-true vertical scale',
+      'Ship on the curved surface: hull, then superstructure, then mast drop behind the limb',
+      'Everest: how far a summit remains visible (mutual horizon geometry)',
+      'Field-of-view wedge + horizon tangent ray',
+      'Teaching scale vs near-true vertical scale (rocket)',
     ],
     equations: [
       'd_horizon ≈ √(2 R h + h²)',
+      'd_visible ≈ √(2 R h₁) + √(2 R h₂)  (two heights)',
       'cos(dip) = R / (R + h)',
-      'C = 2 π R  (circumference)',
     ],
     verified:
-      'Observer geometry: horizon distance and dip grow with height only if the surface curves away. Whole-disk views from altitude match a globe, not a flat plane under the same local “up.”',
+      'Observer geometry: horizon distance and dip grow with height only if the surface curves away. Distant ships and peaks disappear hull-first / base-first — matching a sphere, not a flat plane.',
     honestyNote:
-      'Earth is an oblate spheroid (not a perfect sphere). Atmosphere and refraction shift real horizons slightly. “Teaching scale” exaggerates height so curvature is obvious in a short session — toggle near-true scale to feel how subtle low-altitude curvature is.',
+      'Earth is an oblate spheroid. Atmosphere and refraction extend real horizons slightly. In the ship lab, surface distances use a teaching arc on the globe (km labels stay real) so curvature is readable; rocket altitude has a separate teaching-scale toggle.',
     demoIds: ['D0', 'D1', 'D2'],
     howToExplore: [
-      'Start on Sphere Earth, Launch or scrub altitude — watch the gold horizon guide and limb.',
-      'Switch to Flat disk at the same altitude — the guide stays a flat ring; no planetary limb.',
-      'Open Ship / horizon: sail past ~19 km (eye-level horizon) on sphere vs flat.',
-      'Use Orbit free look to inspect the globe after climbing.',
+      'Rocket: Launch or scrub altitude on Sphere, then flip to Flat at the same height.',
+      'Ship / horizon: Sail away — watch the ship stick to the curve; hull vanishes first.',
+      'Toggle Field of view: gold ray is the geometric horizon tangent; blue fan is FOV.',
+      'Compare gold ring (eye horizon ~20 km) vs green ring (Everest still visible ~hundreds of km).',
+      'Switch to Flat disk: ship never falls behind a limb; Everest stays “visible.”',
     ],
   },
   {

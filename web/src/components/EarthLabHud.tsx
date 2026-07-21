@@ -1,14 +1,17 @@
 import {
   EARTH_RADIUS_KM,
+  EVEREST_HEIGHT_KM,
   formatKm,
   horizonDipDeg,
   horizonDistanceKm,
+  mutualVisibilityKm,
 } from '../physics/earthGeometry'
 import {
   EARTH_LAB_LIMITS,
   earthLabStore,
   useEarthLab,
 } from '../state/earthLabStore'
+import { EVEREST_DISTANCE_KM, OBSERVER_HEIGHT_KM } from '../scenes/earth/ShipHorizonDemo'
 import styles from './EarthLabHud.module.css'
 
 export function EarthLabHud() {
@@ -20,12 +23,16 @@ export function EarthLabHud() {
   const lookMode = useEarthLab((s) => s.lookMode)
   const showGrid = useEarthLab((s) => s.showGrid)
   const showHorizonGuide = useEarthLab((s) => s.showHorizonGuide)
+  const showFov = useEarthLab((s) => s.showFov)
   const shipDistanceKm = useEarthLab((s) => s.shipDistanceKm)
   const shipPlaying = useEarthLab((s) => s.shipPlaying)
 
   const horizonKm = horizonDistanceKm(altitudeKm)
   const dip = horizonDipDeg(altitudeKm)
-  const shipHorizon = horizonDistanceKm(0.03)
+  const eyeHorizon = horizonDistanceKm(OBSERVER_HEIGHT_KM)
+  const everestVis = mutualVisibilityKm(OBSERVER_HEIGHT_KM, EVEREST_HEIGHT_KM)
+  const summitSea = horizonDistanceKm(EVEREST_HEIGHT_KM)
+  const mastVis = mutualVisibilityKm(OBSERVER_HEIGHT_KM, 0.025)
 
   return (
     <div className={styles.hud}>
@@ -166,22 +173,63 @@ export function EarthLabHud() {
               <button type="button" onClick={() => earthLabStore.toggleShipPlay()}>
                 {shipPlaying ? 'Pause' : 'Sail away'}
               </button>
+              <button
+                type="button"
+                onClick={() => earthLabStore.setShipDistanceKm(eyeHorizon)}
+                title="Jump ship to the geometric sea horizon"
+              >
+                To horizon
+              </button>
+              <button
+                type="button"
+                onClick={() => earthLabStore.setShipDistanceKm(EVEREST_DISTANCE_KM)}
+                title="Jump ship near Everest’s ground range"
+              >
+                To Everest
+              </button>
               <button type="button" onClick={() => earthLabStore.resetDemo()}>
                 Reset
               </button>
             </div>
           </div>
+
           <div className={styles.readouts}>
             <div>
-              <span className={styles.k}>Horizon (eye ~30 m)</span>
-              <span className={styles.v}>{formatKm(shipHorizon)}</span>
+              <span className={styles.k}>Eye horizon (~30 m)</span>
+              <span className={styles.v}>{formatKm(eyeHorizon)}</span>
+            </div>
+            <div>
+              <span className={styles.k}>Mast still visible</span>
+              <span className={styles.v}>{formatKm(mastVis)}</span>
+            </div>
+            <div>
+              <span className={styles.k}>Everest visibility</span>
+              <span className={styles.v}>{formatKm(everestVis)}</span>
+            </div>
+            <div>
+              <span className={styles.k}>Summit→sea alone</span>
+              <span className={styles.v}>{formatKm(summitSea)}</span>
             </div>
             <div className={styles.modelTag}>
-              {shapeModel === 'sphere'
-                ? shipDistanceKm > shipHorizon
-                  ? 'Beyond horizon: hull hides behind the curve.'
-                  : 'Still this side of the geometric horizon.'
-                : 'Flat disk: ship stays visible — only shrinks with distance.'}
+              {shapeModel === 'sphere' ? (
+                <>
+                  Ship follows the sphere (teaching arc). Hull drops first, then mid, then mast —{' '}
+                  {shipDistanceKm > mastVis
+                    ? 'now fully behind the curve.'
+                    : shipDistanceKm > eyeHorizon
+                      ? 'past eye horizon; line of sight clips the limb.'
+                      : 'still this side of the eye horizon.'}{' '}
+                  Everest ({EVEREST_HEIGHT_KM} km) at {EVEREST_DISTANCE_KM} km is{' '}
+                  {EVEREST_DISTANCE_KM <= everestVis ? 'visible' : 'hidden'} (limit ≈{' '}
+                  {everestVis.toFixed(0)} km). Arc length is exaggerated so curvature reads;
+                  km labels use real geometry.
+                </>
+              ) : (
+                <>
+                  Flat disk: ship never “falls” behind a curve — only shrinks. Everest stays
+                  visible at any range on this model.
+                </>
+              )}
             </div>
           </div>
         </>
@@ -202,6 +250,16 @@ export function EarthLabHud() {
             onClick={() => earthLabStore.toggleHorizonGuide()}
           >
             Horizon guide
+          </button>
+        )}
+        {subDemo === 'ship' && (
+          <button
+            type="button"
+            className={showFov ? styles.active : undefined}
+            onClick={() => earthLabStore.toggleFov()}
+            title="Field-of-view wedge and horizon tangent ray"
+          >
+            Field of view
           </button>
         )}
       </div>

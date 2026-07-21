@@ -1,4 +1,5 @@
 import { useSyncExternalStore } from 'react'
+import { SURFACE_DEMO_MAX_KM } from '../physics/earthGeometry'
 
 export type EarthSubDemo = 'rocket' | 'ship'
 export type EarthShapeModel = 'sphere' | 'flat'
@@ -17,6 +18,8 @@ export interface EarthLabState {
   lookMode: RocketLookMode
   showGrid: boolean
   showHorizonGuide: boolean
+  /** Show field-of-view wedge + rays in ship demo */
+  showFov: boolean
   /** Ship demo: surface distance from observer (km) */
   shipDistanceKm: number
   shipPlaying: boolean
@@ -28,7 +31,7 @@ type Listener = () => void
 const listeners = new Set<Listener>()
 
 const MAX_ALT_KM = 2000
-const MAX_SHIP_KM = 800
+const MAX_SHIP_KM = SURFACE_DEMO_MAX_KM
 
 let state: EarthLabState = {
   subDemo: 'rocket',
@@ -39,7 +42,8 @@ let state: EarthLabState = {
   lookMode: 'horizon',
   showGrid: true,
   showHorizonGuide: true,
-  shipDistanceKm: 5,
+  showFov: true,
+  shipDistanceKm: 8,
   shipPlaying: false,
   cameraSnapToken: 1,
 }
@@ -73,10 +77,6 @@ export const earthLabStore = {
   setLaunching: (launching: boolean) => setState({ launching }),
   toggleLaunch: () => setState({ launching: !state.launching }),
   setExaggerated: (exaggerated: boolean) => setState({ exaggerated }),
-  /**
-   * @param snap when true (default), re-apply the camera preset.
-   *             false = only update mode UI (e.g. user started dragging).
-   */
   setLookMode: (lookMode: RocketLookMode, snap = true) =>
     setState({
       lookMode,
@@ -85,6 +85,8 @@ export const earthLabStore = {
   requestCameraSnap: () => setState({ cameraSnapToken: state.cameraSnapToken + 1 }),
   toggleGrid: () => setState({ showGrid: !state.showGrid }),
   toggleHorizonGuide: () => setState({ showHorizonGuide: !state.showHorizonGuide }),
+  toggleFov: () => setState({ showFov: !state.showFov }),
+  setShowFov: (showFov: boolean) => setState({ showFov }),
   setShipDistanceKm: (shipDistanceKm: number) =>
     setState({ shipDistanceKm: Math.min(MAX_SHIP_KM, Math.max(0, shipDistanceKm)) }),
   setShipPlaying: (shipPlaying: boolean) => setState({ shipPlaying }),
@@ -93,12 +95,11 @@ export const earthLabStore = {
     setState({
       altitudeKm: 0,
       launching: false,
-      shipDistanceKm: 5,
+      shipDistanceKm: 8,
       shipPlaying: false,
-      lookMode: 'horizon',
+      lookMode: state.subDemo === 'ship' ? 'orbit' : 'horizon',
       cameraSnapToken: state.cameraSnapToken + 1,
     }),
-  /** Advance rocket altitude during launch (km per real second target). */
   tickLaunch: (dtSec: number) => {
     if (!state.launching) return
     const rate = state.altitudeKm < 400 ? 35 : 80
@@ -111,7 +112,7 @@ export const earthLabStore = {
   },
   tickShip: (dtSec: number) => {
     if (!state.shipPlaying) return
-    const next = Math.min(MAX_SHIP_KM, state.shipDistanceKm + 40 * dtSec)
+    const next = Math.min(MAX_SHIP_KM, state.shipDistanceKm + 28 * dtSec)
     if (next >= MAX_SHIP_KM) {
       setState({ shipDistanceKm: MAX_SHIP_KM, shipPlaying: false })
     } else {

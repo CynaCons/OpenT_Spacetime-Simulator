@@ -64,12 +64,12 @@ function applyShipDefaultPose(
   model: 'sphere' | 'flat',
 ) {
   if (model === 'sphere') {
-    const eye = EARTH_RADIUS_SCENE + 0.12
-    cam.position.set(0.2, eye, 0.75)
-    controls.target.set(2.2, EARTH_RADIUS_SCENE * 0.88, 0)
+    // Side profile of the globe so curvature + hull drop read clearly
+    cam.position.set(3.2, 4.6, 7.2)
+    controls.target.set(1.6, 3.6, 0)
   } else {
-    cam.position.set(-0.4, 0.55, 1.4)
-    controls.target.set(2, 0.05, 0)
+    cam.position.set(2.5, 2.2, 6.5)
+    controls.target.set(3.5, 0.2, 0)
   }
   cam.lookAt(controls.target)
   controls.update()
