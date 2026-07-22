@@ -17,7 +17,6 @@ export interface Chapter {
   verified: string
   honestyNote?: string
   demoIds: string[]
-  /** Extra teaching bullets shown in the panel when present */
   howToExplore?: string[]
 }
 
@@ -34,27 +33,24 @@ export const CHAPTERS: Chapter[] = [
     whatWeShow: [
       'Rocket ascent with altitude scrubber and auto-launch',
       'Sphere Earth vs flat-disk model (same rocket path)',
-      'Ship on the curved surface: hull, then superstructure, then mast drop behind the limb',
-      'Everest: how far a summit remains visible (mutual horizon geometry)',
+      'Ship on the curved surface: hull-first drop / transparent when occluded',
+      'Everest: mutual-visibility range rings',
       'Field-of-view wedge + horizon tangent ray',
-      'Teaching scale vs near-true vertical scale (rocket)',
     ],
     equations: [
       'd_horizon ≈ √(2 R h + h²)',
-      'd_visible ≈ √(2 R h₁) + √(2 R h₂)  (two heights)',
+      'd_visible ≈ √(2 R h₁) + √(2 R h₂)',
       'cos(dip) = R / (R + h)',
     ],
     verified:
-      'Observer geometry: horizon distance and dip grow with height only if the surface curves away. Distant ships and peaks disappear hull-first / base-first — matching a sphere, not a flat plane.',
+      'Observer geometry: horizon distance and dip grow with height only if the surface curves away.',
     honestyNote:
-      'Earth is an oblate spheroid. Atmosphere and refraction extend real horizons slightly. In the ship lab, surface distances use a teaching arc on the globe (km labels stay real) so curvature is readable; rocket altitude has a separate teaching-scale toggle.',
+      'Earth is an oblate spheroid. Atmosphere and refraction extend real horizons slightly. Teaching arc stretches surface distances for visibility.',
     demoIds: ['D0', 'D1', 'D2'],
     howToExplore: [
-      'Rocket: Launch or scrub altitude on Sphere, then flip to Flat at the same height.',
-      'Ship / horizon: Sail away — watch the ship stick to the curve; hull vanishes first.',
-      'Toggle Field of view: gold ray is the geometric horizon tangent; blue fan is FOV.',
-      'Compare gold ring (eye horizon ~20 km) vs green ring (Everest still visible ~hundreds of km).',
-      'Switch to Flat disk: ship never falls behind a limb; Everest stays “visible.”',
+      'Rocket: Launch or scrub altitude on Sphere, then flip to Flat.',
+      'Ship / horizon: Sail away — hull fades, then full ghost when occluded.',
+      'Toggle Field of view; compare gold vs green range rings (Everest).',
     ],
   },
   {
@@ -65,24 +61,21 @@ export const CHAPTERS: Chapter[] = [
     model: 'Newtonian gravity / Kepler',
     status: 'available',
     summary:
-      'The solar system under Newton’s inverse-square law and Kepler’s laws — an extraordinarily successful model for centuries. Force points to the Sun; velocity is (nearly) tangent; periods obey T² ∝ a³.',
+      'The solar system under Newton’s inverse-square law and Kepler’s laws — an extraordinarily successful model for centuries.',
     whatWeShow: [
       'Sun and planets on orbital paths',
-      'Velocity (green) and force/acceleration (red) vectors',
-      'Period and semi-major axis labels; Kepler T²/a³ check',
-      'Planet tour with focus + Newtonian readouts',
+      'Velocity (green) and force (red) vectors',
+      'Period labels and Kepler T²/a³ check',
+      'Planet tour with focus',
     ],
     equations: ['F = G m₁ m₂ / r²', 'a = GM / r²', 'T² ∝ a³ (Kepler III)'],
-    verified:
-      'Planetary motions to high accuracy for most purposes; foundation of classical celestial mechanics.',
-    honestyNote:
-      'Orbits here are circular Keplerian (visual). Real planets have small eccentricities; N-body perturbations are deferred.',
+    verified: 'Planetary motions to high accuracy for most purposes.',
+    honestyNote: 'Orbits here are circular Keplerian (visual). Eccentricity and N-body effects deferred.',
     demoIds: ['D4', 'D5'],
     howToExplore: [
-      'Toggle Velocity / Force vectors on the HUD.',
-      'Tour planets — check that T²/a³ ≈ 1 for each.',
-      'Speed up time; double-click a planet to center the camera.',
-      'Next chapter: free sandbox for inverse-square experiments.',
+      'Toggle Velocity / Force vectors.',
+      'Tour planets — check T²/a³ ≈ 1.',
+      'Speed up time; double-click a planet to center.',
     ],
   },
   {
@@ -93,23 +86,21 @@ export const CHAPTERS: Chapter[] = [
     model: 'Newtonian toy model',
     status: 'available',
     summary:
-      'Hands-on inverse-square intuition: place masses, launch test particles, watch trails, and compare speed to escape velocity. Toy units — the shape of the law matters, not SI constants.',
+      'Hands-on inverse-square intuition: place masses, launch test particles, watch trails, and compare speed to escape velocity.',
     whatWeShow: [
       'Central mass + orbiting test body',
-      'Place extra masses or particles on the plane',
+      'Place masses / particles',
       'Trails, force vectors, adjustable G',
-      'Escape-speed comparison for the selection',
+      'Escape-speed comparison',
     ],
     equations: ['a = GM / r²', 'v_esc = √(2GM / r)', 'F = G m₁ m₂ / r²'],
-    verified: 'Pedagogical verification of inverse-square behavior (toy parameters allowed).',
-    honestyNote:
-      'Sandbox uses soft-softened gravity and semi-implicit Euler. Stable orbits are approximate; this is for intuition, not orbital mechanics homework precision.',
+    verified: 'Pedagogical verification of inverse-square behavior (toy parameters).',
+    honestyNote: 'Softened gravity + semi-implicit Euler — intuition, not homework precision.',
     demoIds: ['D6'],
     howToExplore: [
-      'Watch the default orbiter; toggle Force and Trails.',
-      'Speed up until |v| > v_esc — path opens (escape).',
-      'Place a test particle; try different G values.',
-      'When ready, continue to Mercury — where Newton is almost perfect… but not quite.',
+      'Toggle Force and Trails; speed until |v| > v_esc.',
+      'Place a test particle; vary G.',
+      'Continue to Mercury — Newton is almost perfect… but not quite.',
     ],
   },
   {
@@ -120,29 +111,25 @@ export const CHAPTERS: Chapter[] = [
     model: 'Newtonian residual',
     status: 'available',
     summary:
-      'Mercury’s closest point to the Sun (perihelion) slowly advances. Most of that advance is explained by other planets under Newton — but about 43 arcseconds per century remain. That residual is not “Mercury retrograde”; it is a crack that General Relativity later seals.',
+      'Mercury’s perihelion advances ~43″/century more than Newton predicts after planetary perturbations. Not apparent retrograde — a crack sealed by GR.',
     whatWeShow: [
-      'Closed Kepler ellipse (Newton / pure inverse-square)',
-      'Same orbit with residual perihelion precession (exaggerated rosette)',
-      'Side-by-side compare + perihelion markers',
-      'Real rates: ~532″/cy planets + ~43″/cy residual ≈ total observed',
-      'History: Le Verrier, Vulcan hypothesis, Einstein’s later fix',
+      'Closed Kepler ellipse vs residual precession',
+      'Rosette trail + perihelion markers',
+      'Real rates: ~532″/cy + ~43″/cy residual',
+      'History: Le Verrier, Vulcan, Einstein',
     ],
     equations: [
       'Δω_residual ≈ 42.98″ / century',
       'Δω_Newton(planets) ≈ 532″ / century',
-      'r = a(1−e²)/(1+e cos ν)  (ellipse)',
+      'r = a(1−e²)/(1+e cos ν)',
     ],
-    verified:
-      'The anomalous perihelion advance is a real, measured residual after Newtonian perturbations. GR predicts it without inventing a new planet.',
-    honestyNote:
-      'The animation multiplies the residual rate by a large teaching factor so the rosette appears in minutes, not centuries. Readout numbers are the real astronomical values. Orbit is planar 2-body Kepler + prescribed ω̇ — not a full N-body + GR integrator.',
+    verified: 'Anomalous perihelion advance is measured; GR predicts it without a new planet.',
+    honestyNote: 'Animation multiplies residual rate for visibility; readouts are real values.',
     demoIds: ['D7'],
     howToExplore: [
-      'Start on Compare: blue = fixed perihelion, orange = residual advance.',
-      'Speed up time; watch the orange perihelion marker crawl and the purple trail form a rosette.',
-      'Switch Newton-only to see a closed orbit that never “opens.”',
-      'Open History for Le Verrier / Vulcan / GR teaser — then continue to SR and GR chapters.',
+      'Compare: blue fixed perihelion, orange residual.',
+      'Speed up; watch the rosette form.',
+      'Read History, then continue to SR → GR → proofs.',
     ],
   },
   {
@@ -151,13 +138,24 @@ export const CHAPTERS: Chapter[] = [
     title: 'Special Relativity',
     shortTitle: '5 · SR',
     model: 'Special Relativity',
-    status: 'planned',
+    status: 'available',
     summary:
-      'Time dilation and related effects when relative speeds are a non-negligible fraction of c — essential for understanding GPS clocks.',
-    whatWeShow: ['Light clock', 'Time dilation factor γ', 'Length contraction / simultaneity (planned)'],
-    equations: ['γ = 1 / √(1 − v²/c²)', "Δt' = γ Δt"],
-    verified: 'Particle lifetimes, atomic clocks on aircraft/satellites, collider physics, and more.',
+      'When relative speeds are a non-negligible fraction of c, moving clocks tick slower and lengths contract. Essential for GPS and as a prelude to GR.',
+    whatWeShow: [
+      'Light clock at rest vs moving (time dilation)',
+      'Lorentz factor γ readout',
+      'Length contraction of a moving rod',
+      'GPS preview: SR clock correction ~−7 µs/day',
+    ],
+    equations: ['γ = 1 / √(1 − v²/c²)', 'Δt_lab = γ Δτ', 'L = L₀ / γ'],
+    verified: 'Particle lifetimes, atomic clocks, colliders, operational GNSS models.',
+    honestyNote: 'Demos are in the lab frame with ideal mirrors/rods — pedagogical, not full 4-vector machinery.',
     demoIds: ['D8', 'D9'],
+    howToExplore: [
+      'Raise β and watch the moving light clock lag.',
+      'Switch to Length contraction.',
+      'Note GPS teaser; full clock story is Chapter 7.',
+    ],
   },
   {
     id: 'general-relativity',
@@ -165,18 +163,28 @@ export const CHAPTERS: Chapter[] = [
     title: 'General Relativity & geodesics',
     shortTitle: '6 · GR',
     model: 'General Relativity (weak-field pedagogy)',
-    status: 'planned',
+    status: 'available',
     summary:
-      'Gravity as spacetime curvature. Free-fall paths are geodesics — the “straightest” possible paths in curved spacetime. Explore solar-system geodesics in 3D.',
+      'Gravity as spacetime curvature. Free-fall paths are geodesics. Newton’s force picture remains an excellent weak-field approximation.',
     whatWeShow: [
-      'Warped spacetime grid (metaphor + caveats)',
-      'Planetary geodesics',
-      'Newton force picture vs GR geodesic picture',
+      'Warped “fabric” grid (metaphor + caveats)',
+      'Planetary geodesic paths',
+      'Force vs geodesic picture toggle',
+      'Photon path near mass; Mercury precession hint',
     ],
-    equations: ['Geodesic equation (schematic)', 'Weak-field perihelion advance (display form)'],
-    verified: 'Solar-system tests, light deflection, clock rates in gravity wells, etc.',
-    honestyNote: 'Embedded 3D “fabric” visuals are teaching metaphors, not literal 4D spacetime.',
+    equations: [
+      'Geodesic: free-fall = straightest path',
+      'Weak field ≈ Newton + small corrections',
+      'Light deflection δ = 4GM/(c²b) (preview)',
+    ],
+    verified: 'Solar-system tests, light deflection, clock rates in gravity wells.',
+    honestyNote: 'Rubber-sheet embedding is a teaching metaphor — not literal 4D spacetime.',
     demoIds: ['D10', 'D11'],
+    howToExplore: [
+      'Raise central mass; watch the grid deepen.',
+      'Toggle Geodesic / Force / Both.',
+      'Focus Mercury; turn on Photon path; continue to proofs.',
+    ],
   },
   {
     id: 'proofs-of-gr',
@@ -184,21 +192,28 @@ export const CHAPTERS: Chapter[] = [
     title: 'Proofs that GR works',
     shortTitle: '7 · Proofs',
     model: 'Experimental confirmation',
-    status: 'planned',
+    status: 'available',
     summary:
-      'Landmark confirmations: the 1919 solar eclipse light-deflection measurements, and the everyday necessity of SR+GR corrections for GPS.',
+      'Landmark confirmations: 1919 solar-eclipse light deflection (Eddington) and the everyday necessity of SR+GR corrections for GPS.',
     whatWeShow: [
-      '1919 eclipse starlight deflection demo',
-      'GPS clock corrections & map-error accumulation',
-      'Proof gallery for further experiments',
+      'Eclipse starlight deflection: none / Newton / GR',
+      'GPS: SR and GR clock rates; map error if uncorrected',
+      'Both corrections required',
+      'Proof gallery notes for further experiments',
     ],
     equations: [
-      'δ = 4GM / (c² b)  (light deflection)',
-      'GPS: SR (velocity) + GR (gravitational redshift)',
+      'δ = 4GM/(c²b) ≈ 1.75″ (solar limb)',
+      'GPS: ≈ −7 µs/d (SR) + 45 µs/d (GR) ≈ +38 µs/d net',
     ],
     verified:
-      'GR light deflection (eclipse and modern radio measurements); GNSS systems operationally require relativistic clock models.',
+      'GR light deflection (eclipse and modern radio); GNSS systems require relativistic clock models.',
+    honestyNote: 'Figures are standard teaching magnitudes; not a full GNSS or ray-tracing engine.',
     demoIds: ['D12', 'D13'],
+    howToExplore: [
+      'Eclipse: switch deflection model — only GR matches 1.75″.',
+      'GPS: leave corrections off and watch km-scale drift; enable both SR and GR.',
+      'You’ve completed the core story arc — explore earlier chapters freely.',
+    ],
   },
 ]
 

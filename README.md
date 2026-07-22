@@ -6,40 +6,27 @@ Interactive **3D solar system and spacetime simulator** for learning gravity —
 
 ## Live demo (GitHub Pages)
 
-**Open the simulator:**  
 **https://cynacons.github.io/OpenT_Spacetime-Simulator/**
-
-> URL uses the GitHub username that owns the repo. If the link 404s right after the first push, wait for the **Deploy GitHub Pages** workflow to finish (Actions tab), and ensure Pages is set to **GitHub Actions**.
 
 | | |
 |--|--|
 | **Live app** | https://cynacons.github.io/OpenT_Spacetime-Simulator/ |
 | **Source** | https://github.com/CynaCons/OpenT_Spacetime-Simulator |
-| **Product docs** | [PRD.md](./PRD.md) · [PLAN.md](./PLAN.md) |
-
-### Controls (viewport)
-
-| Input | Action |
-|-------|--------|
-| Left-drag | Orbit around the current center |
-| Scroll | Zoom in/out (toward the center) |
-| Right-drag (or middle) | **Move the zoom/orbit center** (switches to Free) |
-| Click planet | Select |
-| Double-click planet / Sun | Focus camera center on that body |
-| **Center → Sun / Earth / Selected / Free** | Set orbit center from the toolbar |
-| **Reset view** | Sun center + default camera distance |
+| **Docs** | [PRD.md](./PRD.md) · [PLAN.md](./PLAN.md) |
 
 ---
 
-## Story arc (chapters)
+## Story arc (all chapters interactive)
 
-1. **Earth is not flat** — geometry and observation (rocket altitude / curvature planned)  
-2. **Newtonian solar system** — inverse-square gravity & Kepler  
-3. **Gravity pull sandbox** — hands-on \(1/r^2\)  
-4. **Mercury anomaly** — perihelion precession (limits of Newton)  
-5. **Special Relativity** — light clocks & time dilation  
-6. **General Relativity & geodesics** — curved spacetime paths  
-7. **Proofs of GR** — 1919 eclipse light deflection · GPS relativity  
+| # | Chapter | Highlights |
+|---|---------|------------|
+| 1 | Earth is not flat | Rocket ascent, ship/horizon, Everest ranges, FOV |
+| 2 | Newtonian solar system | Force/velocity vectors, Kepler T²/a³ tour |
+| 3 | Gravity sandbox | Place masses, trails, G, escape speed |
+| 4 | Mercury anomaly | Perihelion residual ~43″/cy (not retrograde) |
+| 5 | Special Relativity | Light clocks, γ, length contraction |
+| 6 | General Relativity | Warped grid metaphor, geodesics, photons |
+| 7 | Proofs of GR | 1919 eclipse deflection · GPS SR+GR clocks |
 
 ---
 
@@ -52,65 +39,47 @@ npm install
 npm run dev
 ```
 
-Open the URL Vite prints (default `http://localhost:5173`).
-
 | Script | Description |
 |--------|-------------|
 | `npm run dev` | Development server |
-| `npm run build` | Typecheck + production build (base path for Pages) |
+| `npm run build` | Typecheck + production build (Pages base path) |
 | `npm run preview` | Preview production build |
 
 ---
 
 ## Stack
 
-- **Vite** + **React** + **TypeScript**
-- **Three.js** via **React Three Fiber** + **Drei**
-- Deploy: **GitHub Actions → GitHub Pages** (see `.github/workflows/deploy-pages.yml`)
+- Vite · React · TypeScript  
+- Three.js · React Three Fiber · Drei  
+- GitHub Actions → GitHub Pages  
 
 ---
 
 ## Project layout
 
 ```
-.
-├── PRD.md                 Product requirements
-├── PLAN.md                Phased plan + demo inventory
-├── README.md
-├── LICENSE
-├── .github/workflows/     Pages deploy
-└── web/                   Frontend app
-    └── src/
-        ├── app/           Shell layout
-        ├── components/    UI (top bar, chapter panel)
-        ├── content/       Chapter copy & schema
-        ├── physics/       Orbital data & future physics modules
-        ├── scenes/        3D scenes + camera rig
-        ├── state/         Simulation / chapter / camera state
-        └── styles/        Global CSS
+web/src/
+  app/           Shell
+  components/    HUDs + chrome
+  content/       Chapter copy
+  physics/       Earth, Newton, Mercury, relativity
+  scenes/        3D labs per chapter
+  state/         Stores
 ```
 
 ---
 
 ## Status
 
-**Phase 0–1:** app shell, solar system, camera centers, GitHub Pages.
-
-**Phase 2 (Chapter 1) — mature v1:** Earth lab (rocket, ship/horizon, Everest, FOV).
-
-**Phase 3 (Chapters 2–3) — v1:** Newtonian solar system + gravity sandbox.
-
-**Phase 4 (Chapter 4) — v1:** Mercury perihelion residual (~43″/century): Newton closed ellipse vs exaggerated precessing rosette, history (Le Verrier / Vulcan / GR).
-
-**Next:** Phase 5 — Special Relativity. See [PLAN.md](./PLAN.md).
+**v1 story arc complete (Chapters 1–7).** Pedagogical simulations with honesty notes on approximations. See [PLAN.md](./PLAN.md).
 
 ---
 
 ## Scientific honesty
 
-- Visual scales are exaggerated so planets remain visible (true scale is pedagogically useless in one viewport).  
-- GR “fabric” visuals will be teaching metaphors with explicit caveats.  
-- Mercury content uses **perihelion precession**, not apparent retrograde, as the Newtonian residual relevant to GR.
+- Visual scales and precession rates are often exaggerated for teaching; readouts cite real figures where it matters.  
+- GR “fabric” is a metaphor, not literal 4D spacetime.  
+- GPS/eclipse numbers are standard order-of-magnitude teaching values.
 
 ---
 

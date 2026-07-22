@@ -1,7 +1,10 @@
 import { CHAPTERS } from '../content/chapters'
 import { earthLabStore } from '../state/earthLabStore'
+import { grStore, useGr } from '../state/grStore'
 import { mercuryStore, useMercury } from '../state/mercuryStore'
 import { newtonStore } from '../state/newtonStore'
+import { proofsStore, useProofs } from '../state/proofsStore'
+import { srStore, useSr } from '../state/srStore'
 import { simulationStore, useSimulation, type TimeSpeed } from '../state/simulationStore'
 import styles from './TopBar.module.css'
 
@@ -21,13 +24,17 @@ export function TopBar() {
   const mercuryPaused = useMercury((s) => s.paused)
   const mercurySpeed = useMercury((s) => s.speed)
   const mercuryDays = useMercury((s) => s.simDays)
+  const srPaused = useSr((s) => s.paused)
+  const grPaused = useGr((s) => s.paused)
+  const proofsSub = useProofs((s) => s.subDemo)
 
   const isEarthLab = chapterId === 'earth-not-flat'
   const isSandbox = chapterId === 'gravity-sandbox'
   const isMercury = chapterId === 'mercury-anomaly'
-  const isSolarChrome =
-    chapterId === 'newtonian-solar-system' ||
-    (!isEarthLab && !isSandbox && !isMercury)
+  const isSr = chapterId === 'special-relativity'
+  const isGr = chapterId === 'general-relativity'
+  const isProofs = chapterId === 'proofs-of-gr'
+  const isSolar = chapterId === 'newtonian-solar-system'
 
   return (
     <header className={styles.bar}>
@@ -52,7 +59,7 @@ export function TopBar() {
       </label>
 
       {isEarthLab && (
-        <div className={styles.toggles} role="group" aria-label="Earth lab shortcuts">
+        <div className={styles.toggles}>
           <span className={styles.groupLabel}>Ch.1</span>
           <button type="button" onClick={() => earthLabStore.setSubDemo('rocket')}>
             Rocket
@@ -66,20 +73,14 @@ export function TopBar() {
           <button type="button" onClick={() => earthLabStore.setShapeModel('flat')}>
             Flat
           </button>
-          <button
-            type="button"
-            onClick={() => {
-              earthLabStore.resetDemo()
-              simulationStore.resetChapter()
-            }}
-          >
+          <button type="button" onClick={() => earthLabStore.resetDemo()}>
             Reset
           </button>
         </div>
       )}
 
       {isMercury && (
-        <div className={styles.toggles} role="group" aria-label="Mercury lab">
+        <div className={styles.toggles}>
           <span className={styles.groupLabel}>Ch.4</span>
           <button type="button" onClick={() => mercuryStore.togglePause()}>
             {mercuryPaused ? 'Play' : 'Pause'}
@@ -108,7 +109,7 @@ export function TopBar() {
       )}
 
       {isSandbox && (
-        <div className={styles.toggles} role="group" aria-label="Sandbox">
+        <div className={styles.toggles}>
           <span className={styles.groupLabel}>Ch.3</span>
           <button type="button" onClick={() => newtonStore.toggleSandboxPause()}>
             Pause / Play
@@ -119,9 +120,65 @@ export function TopBar() {
         </div>
       )}
 
-      {isSolarChrome && (
+      {isSr && (
+        <div className={styles.toggles}>
+          <span className={styles.groupLabel}>Ch.5</span>
+          <button type="button" onClick={() => srStore.setSubDemo('lightclock')}>
+            Light clock
+          </button>
+          <button type="button" onClick={() => srStore.setSubDemo('length')}>
+            Length
+          </button>
+          <button type="button" onClick={() => srStore.togglePause()}>
+            {srPaused ? 'Play' : 'Pause'}
+          </button>
+          <button type="button" onClick={() => srStore.reset()}>
+            Reset
+          </button>
+        </div>
+      )}
+
+      {isGr && (
+        <div className={styles.toggles}>
+          <span className={styles.groupLabel}>Ch.6</span>
+          <button type="button" onClick={() => grStore.togglePause()}>
+            {grPaused ? 'Play' : 'Pause'}
+          </button>
+          <button type="button" onClick={() => grStore.setFocusBody('mercury')}>
+            Mercury
+          </button>
+          <button type="button" onClick={() => grStore.setFocusBody('earth')}>
+            Earth
+          </button>
+          <button type="button" onClick={() => grStore.reset()}>
+            Reset
+          </button>
+        </div>
+      )}
+
+      {isProofs && (
+        <div className={styles.toggles}>
+          <span className={styles.groupLabel}>Ch.7</span>
+          <button
+            type="button"
+            className={proofsSub === 'eclipse' ? styles.active : undefined}
+            onClick={() => proofsStore.setSubDemo('eclipse')}
+          >
+            Eclipse
+          </button>
+          <button
+            type="button"
+            className={proofsSub === 'gps' ? styles.active : undefined}
+            onClick={() => proofsStore.setSubDemo('gps')}
+          >
+            GPS
+          </button>
+        </div>
+      )}
+
+      {isSolar && (
         <>
-          <div className={styles.timeControls} role="group" aria-label="Time controls">
+          <div className={styles.timeControls}>
             <button type="button" onClick={() => simulationStore.togglePause()}>
               {paused ? 'Play' : 'Pause'}
             </button>
@@ -138,12 +195,9 @@ export function TopBar() {
             <button type="button" onClick={() => simulationStore.resetTime()}>
               Reset t
             </button>
-            <span className={styles.timeReadout} title="Simulated days">
-              t ≈ {simDays.toFixed(1)} d
-            </span>
+            <span className={styles.timeReadout}>t ≈ {simDays.toFixed(1)} d</span>
           </div>
-
-          <div className={styles.toggles} role="group" aria-label="Camera focus">
+          <div className={styles.toggles}>
             <span className={styles.groupLabel}>Center</span>
             <button
               type="button"
@@ -167,19 +221,9 @@ export function TopBar() {
             >
               Selected
             </button>
-            <button
-              type="button"
-              className={focusMode === 'free' ? styles.active : undefined}
-              onClick={() => simulationStore.setFreeFocus()}
-            >
-              Free
-            </button>
             <button type="button" onClick={() => simulationStore.resetCamera()}>
               Reset view
             </button>
-          </div>
-
-          <div className={styles.toggles}>
             <button
               type="button"
               className={showOrbits ? styles.active : undefined}
@@ -193,9 +237,6 @@ export function TopBar() {
               onClick={() => simulationStore.toggleLabels()}
             >
               Labels
-            </button>
-            <button type="button" onClick={() => simulationStore.resetChapter()}>
-              Reset
             </button>
           </div>
         </>
