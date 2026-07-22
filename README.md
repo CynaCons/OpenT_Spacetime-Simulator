@@ -98,9 +98,11 @@ Open the URL Vite prints (default `http://localhost:5173`).
 
 **Phase 2 (Chapter 1) — mature v1:** Earth lab (rocket, ship/horizon, Everest, FOV).
 
-**Phase 3 (Chapters 2–3) — v1:** Newtonian solar system (force/velocity vectors, planet tour, Kepler check) + gravity pull sandbox (place masses, trails, G, escape speed).
+**Phase 3 (Chapters 2–3) — v1:** Newtonian solar system + gravity sandbox.
 
-**Next:** Phase 4 — Mercury perihelion anomaly. See [PLAN.md](./PLAN.md).
+**Phase 4 (Chapter 4) — v1:** Mercury perihelion residual (~43″/century): Newton closed ellipse vs exaggerated precessing rosette, history (Le Verrier / Vulcan / GR).
+
+**Next:** Phase 5 — Special Relativity. See [PLAN.md](./PLAN.md).
 
 ---
 

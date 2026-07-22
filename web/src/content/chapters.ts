@@ -118,18 +118,32 @@ export const CHAPTERS: Chapter[] = [
     title: 'Where Newton fails — Mercury',
     shortTitle: '4 · Mercury',
     model: 'Newtonian residual',
-    status: 'planned',
+    status: 'available',
     summary:
-      'Mercury’s perihelion precesses slightly more than Newtonian gravity (including other planets) can explain — a ~43″/century residual. Not to be confused with apparent retrograde motion.',
+      'Mercury’s closest point to the Sun (perihelion) slowly advances. Most of that advance is explained by other planets under Newton — but about 43 arcseconds per century remain. That residual is not “Mercury retrograde”; it is a crack that General Relativity later seals.',
     whatWeShow: [
-      'Exaggerated perihelion precession for visibility',
-      'Newton residual vs observation',
-      'Historical context (Le Verrier, Vulcan)',
+      'Closed Kepler ellipse (Newton / pure inverse-square)',
+      'Same orbit with residual perihelion precession (exaggerated rosette)',
+      'Side-by-side compare + perihelion markers',
+      'Real rates: ~532″/cy planets + ~43″/cy residual ≈ total observed',
+      'History: Le Verrier, Vulcan hypothesis, Einstein’s later fix',
     ],
-    equations: ['Δω residual ≈ 43″ / century (observed − Newtonian)'],
-    verified: 'The residual is real; Newton alone cannot account for it.',
-    honestyNote: 'Visual precession is exaggerated so the effect is visible in a short session.',
+    equations: [
+      'Δω_residual ≈ 42.98″ / century',
+      'Δω_Newton(planets) ≈ 532″ / century',
+      'r = a(1−e²)/(1+e cos ν)  (ellipse)',
+    ],
+    verified:
+      'The anomalous perihelion advance is a real, measured residual after Newtonian perturbations. GR predicts it without inventing a new planet.',
+    honestyNote:
+      'The animation multiplies the residual rate by a large teaching factor so the rosette appears in minutes, not centuries. Readout numbers are the real astronomical values. Orbit is planar 2-body Kepler + prescribed ω̇ — not a full N-body + GR integrator.',
     demoIds: ['D7'],
+    howToExplore: [
+      'Start on Compare: blue = fixed perihelion, orange = residual advance.',
+      'Speed up time; watch the orange perihelion marker crawl and the purple trail form a rosette.',
+      'Switch Newton-only to see a closed orbit that never “opens.”',
+      'Open History for Le Verrier / Vulcan / GR teaser — then continue to SR and GR chapters.',
+    ],
   },
   {
     id: 'special-relativity',

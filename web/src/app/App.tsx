@@ -1,12 +1,14 @@
 import { Canvas } from '@react-three/fiber'
 import { ChapterPanel } from '../components/ChapterPanel'
 import { EarthLabHud } from '../components/EarthLabHud'
+import { MercuryHud } from '../components/MercuryHud'
 import { NewtonHud } from '../components/NewtonHud'
 import { SandboxHud } from '../components/SandboxHud'
 import { TopBar } from '../components/TopBar'
 import { CameraRig } from '../scenes/CameraRig'
 import { EarthLabScene } from '../scenes/earth/EarthLabScene'
 import { GravitySandboxScene } from '../scenes/GravitySandboxScene'
+import { MercuryAnomalyScene } from '../scenes/MercuryAnomalyScene'
 import { SolarSystemScene } from '../scenes/SolarSystemScene'
 import { useSimulation } from '../state/simulationStore'
 import styles from './App.module.css'
@@ -48,13 +50,29 @@ function SandboxHint() {
   )
 }
 
+function MercuryHint() {
+  return (
+    <div className={styles.hint}>
+      Mercury perihelion · <strong>Blue</strong> Newton closed · <strong>Orange</strong> residual
+      precession (exaggerated) · Not retrograde
+    </div>
+  )
+}
+
 export function App() {
   const chapterId = useSimulation((s) => s.chapterId)
   const isEarthLab = chapterId === 'earth-not-flat'
   const isSandbox = chapterId === 'gravity-sandbox'
   const isNewton = chapterId === 'newtonian-solar-system'
+  const isMercury = chapterId === 'mercury-anomaly'
 
-  const canvasKey = isEarthLab ? 'earth-lab' : isSandbox ? 'sandbox' : 'solar'
+  const canvasKey = isEarthLab
+    ? 'earth-lab'
+    : isSandbox
+      ? 'sandbox'
+      : isMercury
+        ? 'mercury'
+        : 'solar'
 
   return (
     <div className={styles.app}>
@@ -69,7 +87,9 @@ export function App() {
                 ? { position: [0, 7, 4], fov: 50, near: 0.05, far: 500 }
                 : isSandbox
                   ? { position: [0, 14, 16], fov: 50, near: 0.1, far: 500 }
-                  : { position: [0, 28, 42], fov: 45, near: 0.1, far: 2000 }
+                  : isMercury
+                    ? { position: [0, 12, 16], fov: 48, near: 0.1, far: 200 }
+                    : { position: [0, 28, 42], fov: 45, near: 0.1, far: 2000 }
             }
             dpr={[1, 2]}
             gl={{ antialias: true }}
@@ -78,6 +98,8 @@ export function App() {
               <EarthLabScene />
             ) : isSandbox ? (
               <GravitySandboxScene />
+            ) : isMercury ? (
+              <MercuryAnomalyScene />
             ) : (
               <>
                 <SolarSystemScene />
@@ -103,7 +125,13 @@ export function App() {
               <SandboxHint />
             </>
           )}
-          {!isEarthLab && !isNewton && !isSandbox && <SolarHint />}
+          {isMercury && (
+            <>
+              <MercuryHud />
+              <MercuryHint />
+            </>
+          )}
+          {!isEarthLab && !isNewton && !isSandbox && !isMercury && <SolarHint />}
         </div>
       </div>
     </div>

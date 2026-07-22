@@ -1,8 +1,8 @@
 # PLAN.md — OpenT Spacetime Simulator
 
 **Living plan.** Update this file as tasks and subtasks complete.  
-**Last updated:** 2026-07-21  
-**Current phase:** Phase 3 — Newton + gravity sandbox (v1)  
+**Last updated:** 2026-07-22  
+**Current phase:** Phase 4 — Mercury perihelion (v1)  
 
 ---
 
@@ -24,7 +24,7 @@ Phase 0  Project init (docs, repo, tooling)           [x]
 Phase 1  App shell + 3D solar system foundation       [x] (scale modes / Moon optional later)
 Phase 2  Chapter 1 — Earth is not flat                [x] v1 mature
 Phase 3  Chapters 2–3 — Newton + gravity sandbox      [x] v1
-Phase 4  Chapter 4 — Mercury / limits of Newton       [ ]
+Phase 4  Chapter 4 — Mercury / limits of Newton       [x] v1
 Phase 5  Chapter 5 — Special Relativity               [ ]
 Phase 6  Chapter 6 — GR geodesics                     [ ]
 Phase 7  Chapter 7 — Proofs (eclipse, GPS)            [ ]
@@ -272,7 +272,7 @@ web/src/
 ## Phase 4 — Chapter 4: Limits of Newton (Mercury perihelion)
 
 **Goal:** Show the historical crack in Newton: Mercury’s anomalous perihelion precession.  
-**Status:** `[ ]` Pending  
+**Status:** `[x]` **v1** (2026-07-22)  
 **Depends on:** Phase 3  
 
 ### Content accuracy
@@ -282,26 +282,35 @@ Use **perihelion precession**, not “Mercury retrograde,” as the GR-relevant 
 ### Sub-iterations
 
 #### 4.1 — Precession visualization
-- [ ] Mercury orbit with exaggerated precession for visibility  
-- [ ] True residual scale noted in UI (~43″/century)  
-- [ ] Rosette / rotating periapsis marker  
+- [x] Mercury ellipse with exaggerated residual precession  
+- [x] True residual scale in HUD (~42.98″/century)  
+- [x] Rosette trail + rotating periapsis marker  
 
 #### 4.2 — Newton vs observation
-- [ ] Split view or overlay: Newtonian residual vs observed  
-- [ ] Timeline: Le Verrier, hypothesized planet Vulcan, open problem  
+- [x] Newton closed / residual / compare overlay  
+- [x] History panel: Le Verrier, Vulcan, open problem → GR  
 
 #### 4.3 — Bridge to Einstein
-- [ ] Teaser panel: GR accounts for the residual without Vulcan  
-- [ ] Link to Chapter 6–7 for full explanation  
+- [x] History teaser: GR accounts for residual without Vulcan  
+- [ ] Full GR geodesic chapter (Phase 6)  
 
 #### 4.4 — Content
-- [ ] Equations for perihelion advance (display form)  
-- [ ] Sources (historical + modern value)  
+- [x] Equations + Newton planets vs residual breakdown  
+- [ ] Formal paper citations list (nice-to-have)  
 
 ### Acceptance criteria
-- User can *see* precession of perihelion  
-- User understands Newton is extremely good but not exact for Mercury  
-- Clear distinction from apparent retrograde motion  
+- [x] User can *see* perihelion precession (teaching scale)  
+- [x] Real 43″/century residual shown in readouts  
+- [x] Distinct from apparent retrograde (copy in HUD)  
+- [x] Build OK  
+
+### Code map
+```
+web/src/physics/mercury.ts
+web/src/state/mercuryStore.ts
+web/src/scenes/MercuryAnomalyScene.tsx
+web/src/components/MercuryHud.tsx
+```  
 
 ---
 
@@ -468,7 +477,7 @@ These run alongside phases as needed.
 | D4 | Newtonian solar system tour | 2 | 3 | `[x]` v1 |
 | D5 | Force/velocity vectors | 2–3 | 3 | `[x]` v1 |
 | D6 | Gravity pull sandbox | 3 | 3 | `[x]` v1 |
-| D7 | Mercury perihelion anomaly | 4 | 4 | `[ ]` |
+| D7 | Mercury perihelion anomaly | 4 | 4 | `[x]` v1 |
 | D8 | Light clock (SR) | 5 | 5 | `[ ]` |
 | D9 | Length contraction / simultaneity | 5 | 5 | `[ ]` |
 | D10 | Spacetime grid warp | 6 | 6 | `[ ]` |
@@ -500,7 +509,8 @@ These run alongside phases as needed.
 3. [x] **Phase 2 v1 mature:** Earth lab + rocket + flat compare + ship  
 4. [x] Ship occluded → transparent (not removed)  
 5. [x] **Phase 3 v1:** Newton tour + gravity sandbox  
-6. [ ] **Phase 4:** Mercury perihelion anomaly  
+6. [x] **Phase 4 v1:** Mercury perihelion anomaly  
+7. [ ] **Phase 5:** Special Relativity (light clock)  
 
 ---
 
@@ -514,6 +524,7 @@ These run alongside phases as needed.
 | 2026-07-21 | Earth lab camera: always-on OrbitControls; Horizon/Down are snap presets; drag frees camera; orbit target follows rocket. |
 | 2026-07-21 | Ship lab overhaul: teaching arc so ships follow curvature; hull/mid/mast drop; Everest + mutual visibility rings; FOV wedge & horizon tangent. |
 | 2026-07-21 | Ship occluded → transparent ghost. Phase 3 v1: Newton vectors/tour + gravity sandbox (place, trails, G, escape). |
+| 2026-07-22 | Phase 4 v1: Mercury perihelion lab — Newton closed vs residual precession, rosette, history, real 43″/cy readouts. |
 
 ---
 

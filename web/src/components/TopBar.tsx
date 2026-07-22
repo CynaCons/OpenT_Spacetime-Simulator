@@ -1,9 +1,12 @@
 import { CHAPTERS } from '../content/chapters'
 import { earthLabStore } from '../state/earthLabStore'
+import { mercuryStore, useMercury } from '../state/mercuryStore'
+import { newtonStore } from '../state/newtonStore'
 import { simulationStore, useSimulation, type TimeSpeed } from '../state/simulationStore'
 import styles from './TopBar.module.css'
 
 const SPEEDS: TimeSpeed[] = [0, 1, 10, 50, 200]
+const MERCURY_SPEEDS = [10, 40, 120, 400]
 
 export function TopBar() {
   const chapterId = useSimulation((s) => s.chapterId)
@@ -14,7 +17,17 @@ export function TopBar() {
   const showLabels = useSimulation((s) => s.showLabels)
   const selectedBodyId = useSimulation((s) => s.selectedBodyId)
   const focusMode = useSimulation((s) => s.focusMode)
+
+  const mercuryPaused = useMercury((s) => s.paused)
+  const mercurySpeed = useMercury((s) => s.speed)
+  const mercuryDays = useMercury((s) => s.simDays)
+
   const isEarthLab = chapterId === 'earth-not-flat'
+  const isSandbox = chapterId === 'gravity-sandbox'
+  const isMercury = chapterId === 'mercury-anomaly'
+  const isSolarChrome =
+    chapterId === 'newtonian-solar-system' ||
+    (!isEarthLab && !isSandbox && !isMercury)
 
   return (
     <header className={styles.bar}>
@@ -38,7 +51,7 @@ export function TopBar() {
         </select>
       </label>
 
-      {isEarthLab ? (
+      {isEarthLab && (
         <div className={styles.toggles} role="group" aria-label="Earth lab shortcuts">
           <span className={styles.groupLabel}>Ch.1</span>
           <button type="button" onClick={() => earthLabStore.setSubDemo('rocket')}>
@@ -63,7 +76,50 @@ export function TopBar() {
             Reset
           </button>
         </div>
-      ) : (
+      )}
+
+      {isMercury && (
+        <div className={styles.toggles} role="group" aria-label="Mercury lab">
+          <span className={styles.groupLabel}>Ch.4</span>
+          <button type="button" onClick={() => mercuryStore.togglePause()}>
+            {mercuryPaused ? 'Play' : 'Pause'}
+          </button>
+          {MERCURY_SPEEDS.map((s) => (
+            <button
+              key={s}
+              type="button"
+              className={mercurySpeed === s && !mercuryPaused ? styles.active : undefined}
+              onClick={() => mercuryStore.setSpeed(s)}
+            >
+              {s}×
+            </button>
+          ))}
+          <button
+            type="button"
+            onClick={() => {
+              mercuryStore.reset()
+              mercuryStore.clearTrail()
+            }}
+          >
+            Reset
+          </button>
+          <span className={styles.timeReadout}>t ≈ {mercuryDays.toFixed(0)} d</span>
+        </div>
+      )}
+
+      {isSandbox && (
+        <div className={styles.toggles} role="group" aria-label="Sandbox">
+          <span className={styles.groupLabel}>Ch.3</span>
+          <button type="button" onClick={() => newtonStore.toggleSandboxPause()}>
+            Pause / Play
+          </button>
+          <button type="button" onClick={() => newtonStore.resetSandbox()}>
+            Reset scene
+          </button>
+        </div>
+      )}
+
+      {isSolarChrome && (
         <>
           <div className={styles.timeControls} role="group" aria-label="Time controls">
             <button type="button" onClick={() => simulationStore.togglePause()}>
@@ -93,7 +149,6 @@ export function TopBar() {
               type="button"
               className={focusMode === 'sun' ? styles.active : undefined}
               onClick={() => simulationStore.focusSun()}
-              title="Orbit around the Sun"
             >
               Sun
             </button>
@@ -101,7 +156,6 @@ export function TopBar() {
               type="button"
               className={focusMode === 'earth' ? styles.active : undefined}
               onClick={() => simulationStore.focusEarth()}
-              title="Orbit around Earth (follows motion)"
             >
               Earth
             </button>
@@ -110,7 +164,6 @@ export function TopBar() {
               disabled={!selectedBodyId}
               className={focusMode === 'body' ? styles.active : undefined}
               onClick={() => selectedBodyId && simulationStore.focusBody(selectedBodyId)}
-              title="Orbit around the selected planet"
             >
               Selected
             </button>
@@ -118,15 +171,10 @@ export function TopBar() {
               type="button"
               className={focusMode === 'free' ? styles.active : undefined}
               onClick={() => simulationStore.setFreeFocus()}
-              title="Free center — pan with right mouse button, then zoom"
             >
               Free
             </button>
-            <button
-              type="button"
-              onClick={() => simulationStore.resetCamera()}
-              title="Reset camera to default Sun-centered view"
-            >
+            <button type="button" onClick={() => simulationStore.resetCamera()}>
               Reset view
             </button>
           </div>
@@ -149,11 +197,6 @@ export function TopBar() {
             <button type="button" onClick={() => simulationStore.resetChapter()}>
               Reset
             </button>
-            {selectedBodyId && (
-              <button type="button" onClick={() => simulationStore.selectBody(null)}>
-                Clear select
-              </button>
-            )}
           </div>
         </>
       )}
