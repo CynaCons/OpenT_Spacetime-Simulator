@@ -1,0 +1,115 @@
+.rail {
+  position: absolute;
+  top: 0.65rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 4;
+  width: min(720px, calc(100% - 1.5rem));
+  padding: 0.45rem 0.55rem 0.5rem;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: #0a1220e8;
+  backdrop-filter: blur(12px);
+  box-shadow: var(--shadow-soft);
+  animation: fadeInUp 0.35s var(--ease);
+}
+
+.track {
+  position: relative;
+  height: 3px;
+  border-radius: 999px;
+  background: #1a2a44;
+  margin: 0 0.35rem 0.45rem;
+  overflow: hidden;
+}
+
+.fill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #3d7ae0, var(--accent-hot));
+  box-shadow: 0 0 12px var(--accent-glow);
+  transition: width 0.4s var(--ease);
+}
+
+.dots {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.2rem;
+}
+
+.dot {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  border: none;
+  background: transparent;
+  padding: 0.2rem 0.15rem;
+  border-radius: 8px;
+  min-width: 0;
+  color: var(--text-muted);
+}
+
+.dot:hover {
+  background: var(--accent-soft);
+  color: var(--text);
+}
+
+.num {
+  width: 1.35rem;
+  height: 1.35rem;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  font-size: 0.68rem;
+  font-weight: 700;
+  background: #101a2e;
+  transition:
+    background var(--transition),
+    border-color var(--transition),
+    box-shadow var(--transition);
+}
+
+.label {
+  font-size: 0.62rem;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  opacity: 0.85;
+}
+
+.dotActive .num {
+  background: linear-gradient(145deg, #3d7ae0, #1e4a8a);
+  border-color: var(--accent);
+  color: #fff;
+  box-shadow: 0 0 14px var(--accent-glow);
+}
+
+.dotActive {
+  color: var(--text);
+}
+
+.dotActive .label {
+  opacity: 1;
+  font-weight: 600;
+}
+
+.dotDone .num {
+  border-color: #2a6a4a;
+  background: #0e2418;
+  color: var(--success);
+}
+
+@media (max-width: 700px) {
+  .label {
+    display: none;
+  }
+  .rail {
+    width: calc(100% - 1rem);
+    padding: 0.4rem;
+  }
+}

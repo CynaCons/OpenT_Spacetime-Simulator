@@ -114,10 +114,8 @@ export function RocketAscentDemo() {
 
   return (
     <>
-      <color attach="background" args={['#02060f']} />
-      <ambientLight intensity={0.35} />
       <directionalLight position={[8, 12, 4]} intensity={1.35} color="#fff2d6" />
-      <directionalLight position={[-6, -2, -4]} intensity={0.25} color="#6a8cff" />
+      <directionalLight position={[-6, -2, -4]} intensity={0.3} color="#6a8cff" />
 
       {shapeModel === 'sphere' ? (
         <SphereEarth showGrid={showGrid} />

@@ -1,4 +1,4 @@
-import { Html, Line, OrbitControls, Stars } from '@react-three/drei'
+import { Html, Line, OrbitControls } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import { useMemo, useRef, type CSSProperties } from 'react'
 import {
@@ -11,6 +11,7 @@ import {
   teachingPrecessionRadPerDay,
 } from '../physics/mercury'
 import { mercuryStore, useMercury } from '../state/mercuryStore'
+import { SceneAtmosphere } from './shared/SceneAtmosphere'
 
 /** Scene scale: AU → units (zoomed on Mercury). */
 const AU_SCENE = 14
@@ -170,9 +171,7 @@ export function MercuryAnomalyScene() {
   return (
     <>
       <SimDriver />
-      <color attach="background" args={['#04070f']} />
-      <Stars radius={100} depth={40} count={2800} factor={2.8} saturation={0} fade />
-      <hemisphereLight args={['#9bb7ff', '#0a0e18', 0.35]} />
+      <SceneAtmosphere background="#04070f" fogNear={25} fogFar={70} starCount={3200} />
 
       <Sun />
 
@@ -235,6 +234,8 @@ export function MercuryAnomalyScene() {
         minDistance={3}
         maxDistance={40}
         target={[0, 0, 0]}
+        autoRotate
+        autoRotateSpeed={0.35}
       />
     </>
   )

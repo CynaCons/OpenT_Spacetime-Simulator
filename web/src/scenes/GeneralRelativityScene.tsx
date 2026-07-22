@@ -1,8 +1,9 @@
-import { Html, Line, OrbitControls, Stars } from '@react-three/drei'
+import { Html, Line, OrbitControls } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import { useMemo, type CSSProperties } from 'react'
 import { schwarzschildWarp } from '../physics/relativity'
 import { grStore, useGr } from '../state/grStore'
+import { SceneAtmosphere } from './shared/SceneAtmosphere'
 
 const BODIES: Record<
   'mercury' | 'earth' | 'jupiter',
@@ -180,10 +181,7 @@ export function GeneralRelativityScene() {
   return (
     <>
       <Driver />
-      <color attach="background" args={['#03060e']} />
-      <Stars radius={90} depth={35} count={2200} factor={2.4} saturation={0} fade />
-      <ambientLight intensity={0.3} />
-      <hemisphereLight args={['#9bb7ff', '#080c14', 0.4]} />
+      <SceneAtmosphere background="#03060e" fogNear={22} fogFar={60} starCount={2600} />
 
       <WarpedGrid mass={mass} visible={showGrid} />
       <CentralMass mass={mass} />
@@ -210,7 +208,16 @@ export function GeneralRelativityScene() {
         </div>
       </Html>
 
-      <OrbitControls makeDefault enableDamping minDistance={4} maxDistance={45} target={[0, -0.5, 0]} />
+      <OrbitControls
+        makeDefault
+        enableDamping
+        dampingFactor={0.08}
+        minDistance={4}
+        maxDistance={45}
+        target={[0, -0.5, 0]}
+        autoRotate
+        autoRotateSpeed={0.25}
+      />
     </>
   )
 }

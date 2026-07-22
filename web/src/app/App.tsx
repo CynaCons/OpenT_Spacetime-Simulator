@@ -1,5 +1,7 @@
 import { Canvas } from '@react-three/fiber'
+import { Suspense } from 'react'
 import { ChapterPanel } from '../components/ChapterPanel'
+import { ChapterRail } from '../components/ChapterRail'
 import { EarthLabHud } from '../components/EarthLabHud'
 import { GrHud } from '../components/GrHud'
 import { MercuryHud } from '../components/MercuryHud'
@@ -51,52 +53,24 @@ function labForChapter(id: string): Lab {
 }
 
 function Hint({ lab }: { lab: Lab }) {
-  if (lab === 'earth') {
-    return (
-      <div className={styles.hint}>
-        <strong>Drag</strong> to orbit · <strong>Scroll</strong> to zoom · Sphere vs Flat · Rocket /
-        Ship
-      </div>
-    )
-  }
-  if (lab === 'sandbox') {
-    return (
-      <div className={styles.hint}>
-        Gravity sandbox · Place mass/particle · Green velocity · Red force
-      </div>
-    )
-  }
-  if (lab === 'mercury') {
-    return (
-      <div className={styles.hint}>
-        Mercury perihelion · Blue Newton · Orange residual · Not retrograde
-      </div>
-    )
-  }
-  if (lab === 'sr') {
-    return (
-      <div className={styles.hint}>
-        Special Relativity · Light clocks · β = v/c · γ time dilation
-      </div>
-    )
-  }
-  if (lab === 'gr') {
-    return (
-      <div className={styles.hint}>
-        GR metaphor grid · Geodesics · Mass warps fabric · Photon path
-      </div>
-    )
-  }
-  if (lab === 'proofs') {
-    return (
-      <div className={styles.hint}>
-        Proofs · 1919 eclipse deflection · GPS SR+GR clock corrections
-      </div>
-    )
+  const map: Record<Lab, string> = {
+    earth: 'Drag to orbit · Scroll zoom · Sphere vs Flat · Rocket / Ship',
+    sandbox: 'Place mass/particle on grid · Green = velocity · Red = force',
+    mercury: 'Blue = Newton closed · Orange = residual precession · Not retrograde',
+    sr: 'Light clocks · β = v/c · γ time dilation · Length contraction',
+    gr: 'Warped fabric · Geodesics · Raise mass · Photon path',
+    proofs: '1919 eclipse models · GPS — apply both SR + GR',
+    newton: 'Vectors · Tour planets · Double-click to focus · RMB pan',
+    solar: 'Drag orbit · Scroll zoom · RMB pan · Double-click body',
   }
   return (
     <div className={styles.hint}>
-      Drag orbit · Scroll zoom · RMB pan · Double-click body to focus
+      {map[lab].split(' · ').map((part, i, arr) => (
+        <span key={part}>
+          {i === 0 ? <strong>{part}</strong> : part}
+          {i < arr.length - 1 ? ' · ' : ''}
+        </span>
+      ))}
     </div>
   )
 }
@@ -107,18 +81,18 @@ export function App() {
 
   const camera =
     lab === 'earth'
-      ? { position: [0, 7, 4] as [number, number, number], fov: 50, near: 0.05, far: 500 }
+      ? { position: [0, 7, 4] as [number, number, number], fov: 48, near: 0.05, far: 500 }
       : lab === 'sandbox'
-        ? { position: [0, 14, 16] as [number, number, number], fov: 50, near: 0.1, far: 500 }
+        ? { position: [0, 14, 16] as [number, number, number], fov: 48, near: 0.1, far: 500 }
         : lab === 'mercury'
-          ? { position: [0, 12, 16] as [number, number, number], fov: 48, near: 0.1, far: 200 }
+          ? { position: [0, 11, 15] as [number, number, number], fov: 46, near: 0.1, far: 200 }
           : lab === 'sr'
-            ? { position: [0, 1, 12] as [number, number, number], fov: 50, near: 0.1, far: 200 }
+            ? { position: [0, 1.2, 11] as [number, number, number], fov: 48, near: 0.1, far: 200 }
             : lab === 'gr'
-              ? { position: [8, 7, 12] as [number, number, number], fov: 50, near: 0.1, far: 200 }
+              ? { position: [9, 7.5, 11] as [number, number, number], fov: 48, near: 0.1, far: 200 }
               : lab === 'proofs'
-                ? { position: [0, 3, 14] as [number, number, number], fov: 50, near: 0.1, far: 200 }
-                : { position: [0, 28, 42] as [number, number, number], fov: 45, near: 0.1, far: 2000 }
+                ? { position: [0, 2.8, 13] as [number, number, number], fov: 48, near: 0.1, far: 200 }
+                : { position: [0, 26, 40] as [number, number, number], fov: 42, near: 0.1, far: 2000 }
 
   return (
     <div className={styles.app}>
@@ -126,19 +100,33 @@ export function App() {
       <div className={styles.main}>
         <ChapterPanel />
         <div className={styles.viewport}>
-          <Canvas key={lab} camera={camera} dpr={[1, 2]} gl={{ antialias: true }}>
-            {lab === 'earth' && <EarthLabScene />}
-            {lab === 'sandbox' && <GravitySandboxScene />}
-            {lab === 'mercury' && <MercuryAnomalyScene />}
-            {lab === 'sr' && <SpecialRelativityScene />}
-            {lab === 'gr' && <GeneralRelativityScene />}
-            {lab === 'proofs' && <ProofsScene />}
-            {(lab === 'newton' || lab === 'solar') && (
-              <>
-                <SolarSystemScene />
-                <CameraRig />
-              </>
-            )}
+          <ChapterRail />
+          <div className={styles.vignette} aria-hidden />
+          <Canvas
+            key={lab}
+            camera={camera}
+            dpr={[1, 1.75]}
+            gl={{
+              antialias: true,
+              alpha: false,
+              powerPreference: 'high-performance',
+            }}
+            shadows={false}
+          >
+            <Suspense fallback={null}>
+              {lab === 'earth' && <EarthLabScene />}
+              {lab === 'sandbox' && <GravitySandboxScene />}
+              {lab === 'mercury' && <MercuryAnomalyScene />}
+              {lab === 'sr' && <SpecialRelativityScene />}
+              {lab === 'gr' && <GeneralRelativityScene />}
+              {lab === 'proofs' && <ProofsScene />}
+              {(lab === 'newton' || lab === 'solar') && (
+                <>
+                  <SolarSystemScene />
+                  <CameraRig />
+                </>
+              )}
+            </Suspense>
           </Canvas>
 
           {lab === 'earth' && <EarthLabHud />}

@@ -2,44 +2,56 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.75rem 1rem;
-  padding: 0.55rem 0.9rem;
+  gap: 0.65rem 1rem;
+  padding: 0.55rem 0.95rem;
   border-bottom: 1px solid var(--border);
-  background: linear-gradient(180deg, #0e1628 0%, #0a1220 100%);
-  z-index: 2;
+  background:
+    linear-gradient(180deg, #101a30 0%, #0a1220 100%);
+  z-index: 5;
+  box-shadow: 0 4px 24px #00000044;
 }
 
 .brand {
   display: flex;
   align-items: baseline;
   gap: 0.45rem;
-  min-width: 12rem;
+  min-width: 11rem;
 }
 
 .logo {
-  font-weight: 750;
-  letter-spacing: 0.04em;
-  color: var(--accent);
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  background: linear-gradient(120deg, #8bc1ff, #5b9dff 50%, #a78bfa);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-size: 1.05rem;
 }
 
 .subtitle {
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   color: var(--text-muted);
+  font-weight: 500;
 }
 
 .chapterSelect {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.45rem;
   font-size: 0.85rem;
 }
 
 .chapterSelect select {
-  max-width: min(420px, 40vw);
+  max-width: min(440px, 42vw);
   background: #0c1424;
   border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 0.35rem 0.5rem;
+  border-radius: var(--radius-sm);
+  padding: 0.4rem 0.55rem;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.chapterSelect select:hover {
+  border-color: var(--border-strong);
 }
 
 .timeControls,
@@ -53,37 +65,44 @@
 .timeControls button,
 .toggles button {
   border: 1px solid var(--border);
-  background: #101a2e;
-  border-radius: 7px;
-  padding: 0.3rem 0.55rem;
-  font-size: 0.8rem;
+  background: linear-gradient(180deg, #142038 0%, #101a2e 100%);
+  border-radius: var(--radius-sm);
+  padding: 0.32rem 0.58rem;
+  font-size: 0.78rem;
 }
 
 .timeControls button:hover,
 .toggles button:hover {
-  border-color: var(--accent);
+  border-color: var(--border-strong);
+  box-shadow: 0 0 0 1px var(--accent-soft);
 }
 
 .active {
-  background: var(--accent-soft) !important;
+  background: linear-gradient(180deg, #2a4a7a 0%, #1e3a62 100%) !important;
   border-color: var(--accent) !important;
   color: #fff;
+  box-shadow: 0 0 14px var(--accent-glow);
 }
 
 .timeReadout {
   font-family: var(--mono);
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   color: var(--text-muted);
-  margin-left: 0.25rem;
+  margin-left: 0.2rem;
   min-width: 5.5rem;
+  padding: 0.2rem 0.4rem;
+  border-radius: 6px;
+  background: #0a1220;
+  border: 1px solid #1a2a44;
 }
 
 .groupLabel {
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.06em;
   color: var(--text-muted);
   margin-right: 0.15rem;
+  font-weight: 700;
 }
 
 .toggles button:disabled {

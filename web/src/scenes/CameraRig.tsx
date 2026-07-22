@@ -127,9 +127,12 @@ export function CameraRig() {
       ref={controlsRef}
       makeDefault
       enableDamping
-      dampingFactor={0.08}
+      dampingFactor={0.07}
       minDistance={0.8}
       maxDistance={800}
+      zoomSpeed={1.15}
+      rotateSpeed={0.88}
+      panSpeed={0.85}
       target={[0, 0, 0]}
     />
   )

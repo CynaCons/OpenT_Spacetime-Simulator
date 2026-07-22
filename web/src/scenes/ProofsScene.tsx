@@ -1,4 +1,4 @@
-import { Html, Line, OrbitControls, Stars } from '@react-three/drei'
+import { Html, Line, OrbitControls } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import { useMemo, type CSSProperties } from 'react'
 import {
@@ -9,6 +9,7 @@ import {
   deflectionArcsec,
 } from '../physics/relativity'
 import { proofsStore, useProofs } from '../state/proofsStore'
+import { SceneAtmosphere } from './shared/SceneAtmosphere'
 
 function EclipseDemo() {
   const model = useProofs((s) => s.deflectionModel)
@@ -196,19 +197,20 @@ export function ProofsScene() {
   return (
     <>
       <Driver />
-      <color attach="background" args={['#02060f']} />
-      <Stars radius={100} depth={40} count={3500} factor={3} saturation={0} fade />
-      <ambientLight intensity={0.35} />
-      <directionalLight position={[6, 8, 4]} intensity={1.2} />
+      <SceneAtmosphere background="#02060f" fogNear={20} fogFar={55} starCount={3800} />
+      <directionalLight position={[6, 8, 4]} intensity={1.25} color="#fff2d6" />
 
       {sub === 'eclipse' ? <EclipseDemo /> : <GpsDemo />}
 
       <OrbitControls
         makeDefault
         enableDamping
+        dampingFactor={0.08}
         minDistance={3}
         maxDistance={35}
         target={[0, 0.2, 0]}
+        autoRotate={sub === 'gps'}
+        autoRotateSpeed={0.4}
       />
     </>
   )

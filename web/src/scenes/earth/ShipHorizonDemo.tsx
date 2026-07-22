@@ -307,10 +307,8 @@ export function ShipHorizonDemo() {
 
   return (
     <>
-      <color attach="background" args={['#050a14']} />
-      <ambientLight intensity={0.42} />
-      <directionalLight position={[6, 10, 4]} intensity={1.25} />
-      <directionalLight position={[-4, 2, -6]} intensity={0.3} color="#6a8cff" />
+      <directionalLight position={[6, 10, 4]} intensity={1.3} color="#fff2d6" />
+      <directionalLight position={[-4, 2, -6]} intensity={0.35} color="#6a8cff" />
 
       {shapeModel === 'sphere' ? (
         <SphereEarth showGrid={showGrid} />

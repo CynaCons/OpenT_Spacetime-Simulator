@@ -1,5 +1,5 @@
-import { Stars } from '@react-three/drei'
 import { useEarthLab } from '../../state/earthLabStore'
+import { SceneAtmosphere } from '../shared/SceneAtmosphere'
 import { EarthLabCamera } from './EarthLabCamera'
 import { RocketAscentDemo } from './RocketAscentDemo'
 import { ShipHorizonDemo } from './ShipHorizonDemo'
@@ -13,7 +13,7 @@ export function EarthLabScene() {
 
   return (
     <>
-      <Stars radius={80} depth={30} count={2500} factor={2.5} saturation={0} fade speed={0.2} />
+      <SceneAtmosphere background="#02060f" fogNear={18} fogFar={55} starCount={3000} />
       {subDemo === 'rocket' ? <RocketAscentDemo /> : <ShipHorizonDemo />}
       <EarthLabCamera />
     </>

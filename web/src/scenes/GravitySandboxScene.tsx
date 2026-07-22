@@ -1,8 +1,9 @@
-import { OrbitControls, Line, Stars } from '@react-three/drei'
+import { OrbitControls, Line } from '@react-three/drei'
 import { useFrame, type ThreeEvent } from '@react-three/fiber'
 import { useMemo, type ReactNode } from 'react'
 import { escapeSpeed } from '../physics/newton'
 import { newtonStore, useNewton, type SandboxBody } from '../state/newtonStore'
+import { SceneAtmosphere } from './shared/SceneAtmosphere'
 
 function BodyMesh({
   body,
@@ -155,12 +156,9 @@ export function GravitySandboxScene() {
 
   return (
     <>
-      <color attach="background" args={['#03060f']} />
-      <Stars radius={120} depth={40} count={2500} factor={2.5} saturation={0} fade />
-      <ambientLight intensity={0.25} />
-      <hemisphereLight args={['#9bb7ff', '#0a0e18', 0.4]} />
+      <SceneAtmosphere background="#03060f" fogNear={30} fogFar={80} starCount={2800} />
 
-      <gridHelper args={[40, 40, '#1a3050', '#0e1a2c']} />
+      <gridHelper args={[40, 40, '#2a4a72', '#0e1a2c']} />
       <ClickPlane />
 
       {trails && <Trails bodies={bodies} />}

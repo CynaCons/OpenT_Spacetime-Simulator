@@ -1,8 +1,9 @@
-import { Html, Line, OrbitControls, Stars } from '@react-three/drei'
+import { Html, Line, OrbitControls } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import { useMemo, type CSSProperties } from 'react'
 import { contractedLength, lorentzGamma } from '../physics/relativity'
 import { srStore, useSr } from '../state/srStore'
+import { SceneAtmosphere } from './shared/SceneAtmosphere'
 
 const C_SCENE = 4 // scene units per “c” for light travel
 
@@ -141,12 +142,10 @@ export function SpecialRelativityScene() {
   return (
     <>
       <Driver />
-      <color attach="background" args={['#050814']} />
-      <Stars radius={80} depth={30} count={2000} factor={2.2} saturation={0} fade />
-      <ambientLight intensity={0.45} />
-      <directionalLight position={[5, 8, 4]} intensity={1.1} />
+      <SceneAtmosphere background="#050814" fogNear={18} fogFar={55} starCount={2200} />
+      <directionalLight position={[5, 8, 4]} intensity={1.15} color="#fff2d6" />
 
-      <gridHelper args={[24, 24, '#1a3050', '#0c1524']} position={[0, -4, 0]} />
+      <gridHelper args={[24, 24, '#2a4a72', '#0c1524']} position={[0, -4, 0]} />
 
       {subDemo === 'lightclock' ? (
         <>

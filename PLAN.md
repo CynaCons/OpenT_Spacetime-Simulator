@@ -96,6 +96,7 @@ Phase 8  Polish, content, deploy                      [x] v1
 |------|--------|
 | 2026-07-21 | Project init through Phase 4 (Earth, Newton, sandbox, Mercury). |
 | 2026-07-22 | Phases 5–7 implemented (SR, GR, proofs). Full story arc v1. Build + review. |
+| 2026-07-22 | UX/3D polish: chapter rail, SceneAtmosphere, vignette, HUD/UI refresh, solar hover glow, auto-rotate on select labs. |
 
 ---
 
