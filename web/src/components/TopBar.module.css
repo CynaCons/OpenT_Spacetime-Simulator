@@ -96,6 +96,10 @@
   border: 1px solid #1a2a44;
 }
 
+.right {
+  margin-left: auto;
+}
+
 .groupLabel {
   font-size: 0.68rem;
   text-transform: uppercase;

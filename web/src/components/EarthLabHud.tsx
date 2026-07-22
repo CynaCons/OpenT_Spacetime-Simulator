@@ -12,6 +12,7 @@ import {
   useEarthLab,
 } from '../state/earthLabStore'
 import { EVEREST_DISTANCE_KM, OBSERVER_HEIGHT_KM } from '../scenes/earth/ShipHorizonDemo'
+import { HudShell } from './HudShell'
 import styles from './EarthLabHud.module.css'
 
 export function EarthLabHud() {
@@ -35,7 +36,7 @@ export function EarthLabHud() {
   const mastVis = mutualVisibilityKm(OBSERVER_HEIGHT_KM, 0.025)
 
   return (
-    <div className={styles.hud}>
+    <HudShell lab="01" title="Earth curvature lab">
       <div className={styles.row}>
         <span className={styles.label}>Demo</span>
         <button
@@ -263,6 +264,6 @@ export function EarthLabHud() {
           </button>
         )}
       </div>
-    </div>
+    </HudShell>
   )
 }

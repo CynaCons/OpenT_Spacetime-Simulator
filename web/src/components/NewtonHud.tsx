@@ -2,6 +2,7 @@ import { PLANETS } from '../physics/solarSystemData'
 import { focusTourBody, planetNewtonStats } from '../scenes/SolarSystemScene'
 import { newtonStore, useNewton } from '../state/newtonStore'
 import { useSimulation } from '../state/simulationStore'
+import { HudShell } from './HudShell'
 import styles from './EarthLabHud.module.css'
 
 export function NewtonHud() {
@@ -13,7 +14,7 @@ export function NewtonHud() {
   const stats = tourBodyId ? planetNewtonStats(tourBodyId, simDays) : null
 
   return (
-    <div className={styles.hud}>
+    <HudShell lab="02" title="Newtonian solar system">
       <div className={styles.row}>
         <span className={styles.label}>Vectors</span>
         <button
@@ -99,6 +100,6 @@ export function NewtonHud() {
           Sun (F = GMm/r²). Kepler III: T² ∝ a³. Use time controls in the top bar.
         </div>
       </div>
-    </div>
+    </HudShell>
   )
 }

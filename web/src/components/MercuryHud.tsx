@@ -6,6 +6,7 @@ import {
   MERCURY_TOTAL_OBSERVED_ARCSEC_PER_CENTURY,
   formatResidual,
   residualPrecessionRadPerOrbit,
+  teachingPrecessionRadPerDay,
 } from '../physics/mercury'
 import {
   EXAGGERATION_PRESETS,
@@ -13,6 +14,7 @@ import {
   useMercury,
   type MercuryModel,
 } from '../state/mercuryStore'
+import { HudShell } from './HudShell'
 import styles from './EarthLabHud.module.css'
 
 const SPEEDS = [10, 40, 120, 400]
@@ -29,9 +31,12 @@ export function MercuryHud() {
 
   const residualPerOrbitArcsec =
     (residualPrecessionRadPerOrbit() * 206264.80624709636).toFixed(3)
+  const orbits = simDays / MERCURY_PERIOD_DAYS
+  const periapsisTurns =
+    (teachingPrecessionRadPerDay(exaggeration) * simDays) / (Math.PI * 2)
 
   return (
-    <div className={styles.hud}>
+    <HudShell lab="04" title="Mercury perihelion">
       <div className={styles.row}>
         <span className={styles.label}>Model</span>
         {(
@@ -161,6 +166,14 @@ export function MercuryHud() {
           <span className={styles.v}>{(simDays / 365.25).toFixed(2)} y</span>
         </div>
         <div>
+          <span className={styles.k}>Orbits</span>
+          <span className={styles.v}>{orbits.toFixed(1)}</span>
+        </div>
+        <div>
+          <span className={styles.k}>Perihelion turns (teaching)</span>
+          <span className={styles.v}>{periapsisTurns.toFixed(2)}</span>
+        </div>
+        <div>
           <span className={styles.k}>Newton (other planets)</span>
           <span className={styles.v}>
             ~{MERCURY_NEWTON_PLANETS_ARCSEC_PER_CENTURY.toFixed(0)}″ / cy
@@ -201,6 +214,6 @@ export function MercuryHud() {
           Later chapters show spacetime geodesics and experimental proofs.
         </div>
       )}
-    </div>
+    </HudShell>
   )
 }

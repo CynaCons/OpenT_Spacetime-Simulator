@@ -231,16 +231,20 @@ export function TopBar() {
             >
               Orbits
             </button>
-            <button
-              type="button"
-              className={showLabels ? styles.active : undefined}
-              onClick={() => simulationStore.toggleLabels()}
-            >
-              Labels
-            </button>
           </div>
         </>
       )}
+
+      <div className={`${styles.toggles} ${styles.right}`}>
+        <button
+          type="button"
+          className={showLabels ? styles.active : undefined}
+          onClick={() => simulationStore.toggleLabels()}
+          title="Show or hide labels inside the 3D view"
+        >
+          Labels
+        </button>
+      </div>
     </header>
   )
 }

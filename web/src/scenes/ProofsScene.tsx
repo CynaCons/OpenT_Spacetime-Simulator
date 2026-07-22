@@ -1,6 +1,6 @@
-import { Html, Line, OrbitControls } from '@react-three/drei'
+import { Line, OrbitControls } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
-import { useMemo, type CSSProperties } from 'react'
+import { useMemo } from 'react'
 import {
   GPS_GR_US_PER_DAY,
   GPS_NET_US_PER_DAY,
@@ -10,6 +10,7 @@ import {
 } from '../physics/relativity'
 import { proofsStore, useProofs } from '../state/proofsStore'
 import { SceneAtmosphere } from './shared/SceneAtmosphere'
+import { SceneLabel } from './shared/SceneLabel'
 
 function EclipseDemo() {
   const model = useProofs((s) => s.deflectionModel)
@@ -84,17 +85,12 @@ function EclipseDemo() {
         </group>
       ))}
 
-      <Html position={[0, 2.4, 0]} center style={{ pointerEvents: 'none' }}>
-        <div style={{ ...tag('#e8eefc'), textAlign: 'center' }}>
-          1919 eclipse thought-experiment
-          <br />
-          Deflection model: <strong>{model.toUpperCase()}</strong> → δ ≈ {delta.toFixed(3)}″
-          <br />
-          <span style={{ color: '#8b9bb8', fontSize: 10 }}>
-            White = apparent star · Blue ghost = undeflected direction
-          </span>
-        </div>
-      </Html>
+      <SceneLabel position={[0, 2.1, 0]} color="#ffcc66">
+        eclipsed Sun · δ ≈ {delta.toFixed(2)}″
+      </SceneLabel>
+      <SceneLabel position={[7.65, 1.35, 0]} color="#c5d4f0">
+        stars: white apparent · blue true
+      </SceneLabel>
     </group>
   )
 }
@@ -165,23 +161,13 @@ function GpsDemo() {
         />
       </mesh>
 
-      <Html position={[0, 3.2, 0]} center style={{ pointerEvents: 'none' }}>
-        <div style={{ ...tag('#e8eefc'), textAlign: 'center', minWidth: 280 }}>
-          GPS clocks · t ≈ {days.toFixed(1)} days
-          <br />
-          SR term ≈ {GPS_SR_US_PER_DAY} µs/day · GR term ≈ +{GPS_GR_US_PER_DAY} µs/day
-          <br />
-          Net if uncorrected ≈ {GPS_NET_US_PER_DAY.toFixed(1)} µs/day
-          <br />
-          <strong style={{ color: Math.abs(errKm) < 0.5 ? '#7ddea8' : '#f07178' }}>
-            Position error ≈ {errKm.toFixed(1)} km
-          </strong>
-          <br />
-          <span style={{ fontSize: 10, color: '#8b9bb8' }}>
-            Apply both SR + GR corrections → error stays ~0
-          </span>
-        </div>
-      </Html>
+      <SceneLabel
+        position={[errKm * 0.08, 1.85, 0]}
+        color={Math.abs(errKm) < 0.5 ? '#7ddea8' : '#f07178'}
+        style={{ fontFamily: 'var(--mono)' }}
+      >
+        fix error ≈ {errKm.toFixed(1)} km
+      </SceneLabel>
     </group>
   )
 }
@@ -214,17 +200,4 @@ export function ProofsScene() {
       />
     </>
   )
-}
-
-function tag(color: string): CSSProperties {
-  return {
-    color,
-    fontSize: 12,
-    lineHeight: 1.4,
-    textShadow: '0 1px 3px #000',
-    background: '#0a1220dd',
-    padding: '6px 10px',
-    borderRadius: 6,
-    border: `1px solid ${color}44`,
-  }
 }

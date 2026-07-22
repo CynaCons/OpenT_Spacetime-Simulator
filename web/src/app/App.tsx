@@ -58,7 +58,7 @@ function Hint({ lab }: { lab: Lab }) {
     sandbox: 'Place mass/particle on grid · Green = velocity · Red = force',
     mercury: 'Blue = Newton closed · Orange = residual precession · Not retrograde',
     sr: 'Light clocks · β = v/c · γ time dilation · Length contraction',
-    gr: 'Warped fabric · Geodesics · Raise mass · Photon path',
+    gr: 'Release the probe · Nothing pulls it — geometry does · Mass slider',
     proofs: '1919 eclipse models · GPS — apply both SR + GR',
     newton: 'Vectors · Tour planets · Double-click to focus · RMB pan',
     solar: 'Drag orbit · Scroll zoom · RMB pan · Double-click body',

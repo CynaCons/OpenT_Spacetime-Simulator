@@ -1,10 +1,9 @@
-import { Html, Line, OrbitControls } from '@react-three/drei'
+import { Line, OrbitControls } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
-import { useMemo, useRef, type CSSProperties } from 'react'
+import { useMemo, useRef } from 'react'
 import {
   MERCURY_A_AU,
   MERCURY_E,
-  MERCURY_PERIOD_DAYS,
   mercuryPosition,
   periapsisDirection,
   sampleEllipse,
@@ -12,6 +11,7 @@ import {
 } from '../physics/mercury'
 import { mercuryStore, useMercury } from '../state/mercuryStore'
 import { SceneAtmosphere } from './shared/SceneAtmosphere'
+import { SceneLabel } from './shared/SceneLabel'
 
 /** Scene scale: AU → units (zoomed on Mercury). */
 const AU_SCENE = 14
@@ -27,9 +27,9 @@ function Sun() {
       </mesh>
       <pointLight color="#ffd89a" intensity={90} distance={80} decay={2} />
       <ambientLight intensity={0.18} />
-      <Html distanceFactor={18} position={[0, SUN_R + 0.4, 0]} style={{ pointerEvents: 'none' }}>
-        <div style={labelStyle('#ffcc66')}>Sun</div>
-      </Html>
+      <SceneLabel position={[0, SUN_R + 0.5, 0]} color="#ffcc66" distanceFactor={18}>
+        Sun
+      </SceneLabel>
     </group>
   )
 }
@@ -91,13 +91,13 @@ function PeriapsisMarker({
         <sphereGeometry args={[0.12, 12, 12]} />
         <meshBasicMaterial color={color} />
       </mesh>
-      <Html
-        position={[dx * (tip + 0.3), 0.2, dz * (tip + 0.3)]}
+      <SceneLabel
+        position={[dx * (tip + 0.4), 0.25, dz * (tip + 0.4)]}
+        color={color}
         distanceFactor={16}
-        style={{ pointerEvents: 'none' }}
       >
-        <div style={labelStyle(color)}>{labelText}</div>
-      </Html>
+        {labelText}
+      </SceneLabel>
     </group>
   )
 }
@@ -117,9 +117,9 @@ function MercuryBody({
         <sphereGeometry args={[MERCURY_R, 24, 24]} />
         <meshStandardMaterial color={color} metalness={0.3} roughness={0.55} />
       </mesh>
-      <Html distanceFactor={14} position={[0.2, 0.35, 0]} style={{ pointerEvents: 'none' }}>
-        <div style={labelStyle(color)}>{name}</div>
-      </Html>
+      <SceneLabel distanceFactor={14} position={[0, MERCURY_R + 0.35, 0]} color={color}>
+        {name}
+      </SceneLabel>
     </group>
   )
 }
@@ -165,9 +165,6 @@ export function MercuryAnomalyScene() {
     [simDays, omegaResidual],
   )
 
-  const orbits = simDays / MERCURY_PERIOD_DAYS
-  const periapsisTurns = omegaResidual / (Math.PI * 2)
-
   return (
     <>
       <SimDriver />
@@ -190,18 +187,10 @@ export function MercuryAnomalyScene() {
       {showRosette && (model === 'residual' || model === 'compare') && <RosetteTrail />}
 
       {showPeriapsis && (model === 'newton' || model === 'compare') && (
-        <PeriapsisMarker
-          omega={omegaNewton}
-          color="#5b9dff"
-          labelText="Perihelion (Newton fixed)"
-        />
+        <PeriapsisMarker omega={omegaNewton} color="#5b9dff" labelText="perihelion · Newton" />
       )}
       {showPeriapsis && (model === 'residual' || model === 'compare') && (
-        <PeriapsisMarker
-          omega={omegaResidual}
-          color="#e27b58"
-          labelText="Perihelion (precessing residual)"
-        />
+        <PeriapsisMarker omega={omegaResidual} color="#e27b58" labelText="perihelion · residual" />
       )}
 
       {(model === 'newton' || model === 'compare') && (
@@ -219,14 +208,6 @@ export function MercuryAnomalyScene() {
         />
       )}
 
-      <Html position={[0, -2.2, 0]} center style={{ pointerEvents: 'none' }}>
-        <div style={{ ...labelStyle('#c5d4f0'), textAlign: 'center', minWidth: 240 }}>
-          t ≈ {simDays.toFixed(0)} d · {orbits.toFixed(1)} orbits
-          <br />
-          perihelion rotated ≈ {periapsisTurns.toFixed(2)} turns (teaching scale)
-        </div>
-      </Html>
-
       <OrbitControls
         makeDefault
         enableDamping
@@ -239,17 +220,4 @@ export function MercuryAnomalyScene() {
       />
     </>
   )
-}
-
-function labelStyle(color: string): CSSProperties {
-  return {
-    color,
-    fontSize: 11,
-    whiteSpace: 'nowrap',
-    textShadow: '0 1px 4px #000',
-    background: '#0a1220cc',
-    padding: '2px 6px',
-    borderRadius: 4,
-    border: `1px solid ${color}44`,
-  }
 }

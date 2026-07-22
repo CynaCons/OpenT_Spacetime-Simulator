@@ -13,6 +13,7 @@ import {
   surfaceKmToTeachingAngle,
 } from '../../physics/earthGeometry'
 import { earthLabStore, useEarthLab } from '../../state/earthLabStore'
+import { useSimulation } from '../../state/simulationStore'
 import { FlatEarth, SphereEarth } from './EarthMeshes'
 
 /** Eye height above water / ground (km) — ~30 m. */
@@ -241,12 +242,12 @@ export function ShipHorizonDemo() {
   const showGrid = useEarthLab((s) => s.showGrid)
   const shipDistanceKm = useEarthLab((s) => s.shipDistanceKm)
   const showFov = useEarthLab((s) => s.showFov)
+  const labels = useSimulation((s) => s.showLabels)
   const shipRef = useRef<Group>(null)
   const everestRef = useRef<Group>(null)
 
   const eyeHorizonKm = horizonDistanceKm(OBSERVER_HEIGHT_KM)
   const everestVisKm = mutualVisibilityKm(OBSERVER_HEIGHT_KM, EVEREST_HEIGHT_KM)
-  const everestFromSummitKm = horizonDistanceKm(EVEREST_HEIGHT_KM)
   const hide = shipHideFraction(shipDistanceKm, OBSERVER_HEIGHT_KM, SHIP_MAST_KM)
 
   const pathPts = useMemo(() => surfacePathPoints(shapeModel), [shapeModel])
@@ -330,21 +331,22 @@ export function ShipHorizonDemo() {
         <sphereGeometry args={[0.075, 16, 16]} />
         <meshStandardMaterial color="#f0b429" emissive="#f0b429" emissiveIntensity={0.55} />
       </mesh>
-      <Html
-        position={
-          shapeModel === 'sphere'
-            ? [0.2, EARTH_RADIUS_SCENE + 0.35, 0.1]
-            : [0.25, 0.4, 0]
-        }
-        distanceFactor={9}
-        style={{ pointerEvents: 'none' }}
-      >
-        <div style={labelStyle('#f0b429')}>
-          Eye · {Math.round(OBSERVER_HEIGHT_KM * 1000)} m ASL
-          <br />
-          sea horizon ≈ {eyeHorizonKm.toFixed(1)} km
-        </div>
-      </Html>
+      {labels && (
+        <Html
+          position={
+            shapeModel === 'sphere'
+              ? [0.2, EARTH_RADIUS_SCENE + 0.35, 0.1]
+              : [0.25, 0.4, 0]
+          }
+
+          zIndexRange={[2, 0]}
+          style={{ pointerEvents: 'none' }}
+        >
+          <div style={labelStyle('#f0b429')}>
+            Eye · horizon ≈ {eyeHorizonKm.toFixed(1)} km
+          </div>
+        </Html>
+      )}
 
       {/* Field of view */}
       {showFov &&
@@ -390,68 +392,75 @@ export function ShipHorizonDemo() {
           hideMid={shapeModel === 'sphere' && hide.mid && !hide.fullyGone}
           occluded={shapeModel === 'sphere' && hide.fullyGone}
         />
-        <Html distanceFactor={7} position={[0.14, 0.34, 0]} style={{ pointerEvents: 'none' }}>
-          <div
-            style={labelStyle(
-              shapeModel === 'sphere' && (hide.hull || hide.fullyGone) ? '#f07178' : '#e8eefc',
-            )}
+        {labels && (
+          <Html
+
+            position={[0.14, 0.34, 0]}
+            zIndexRange={[2, 0]}
+            style={{ pointerEvents: 'none' }}
           >
-            Ship · {shipDistanceKm.toFixed(0)} km
-            {shapeModel === 'sphere' && hide.hull && !hide.fullyGone
-              ? ' · hull under horizon'
-              : ''}
-            {shapeModel === 'sphere' && hide.fullyGone
-              ? ' · transparent (occluded by curve)'
-              : ''}
-          </div>
-        </Html>
+            <div
+              style={labelStyle(
+                shapeModel === 'sphere' && (hide.hull || hide.fullyGone) ? '#f07178' : '#e8eefc',
+              )}
+            >
+              Ship · {shipDistanceKm.toFixed(0)} km
+              {shapeModel === 'sphere' && hide.hull && !hide.fullyGone
+                ? ' · hull under horizon'
+                : ''}
+              {shapeModel === 'sphere' && hide.fullyGone ? ' · behind the curve' : ''}
+            </div>
+          </Html>
+        )}
       </group>
 
       {/* Everest */}
       <group ref={everestRef}>
         <EverestMesh heightScene={everestHScene} />
-        <Html
-          distanceFactor={8}
-          position={[0.12, everestHScene + 0.18, 0]}
-          style={{ pointerEvents: 'none' }}
-        >
-          <div style={labelStyle(everestVisible ? '#7ddea8' : '#f07178')}>
-            Everest · {EVEREST_HEIGHT_KM.toFixed(2)} km high
-            <br />
-            {EVEREST_DISTANCE_KM} km from eye
-            <br />
-            {shapeModel === 'sphere'
-              ? everestVisible
-                ? `Summit visible (limit ≈ ${everestVisKm.toFixed(0)} km)`
-                : `Hidden (limit ≈ ${everestVisKm.toFixed(0)} km)`
-              : 'Always “visible” on a flat disk'}
-          </div>
-        </Html>
+        {labels && (
+          <Html
+
+            position={[0.12, everestHScene + 0.18, 0]}
+            zIndexRange={[2, 0]}
+            style={{ pointerEvents: 'none' }}
+          >
+            <div style={labelStyle(everestVisible ? '#7ddea8' : '#f07178')}>
+              Everest ·{' '}
+              {shapeModel === 'sphere'
+                ? everestVisible
+                  ? `visible (limit ≈ ${everestVisKm.toFixed(0)} km)`
+                  : `hidden (limit ≈ ${everestVisKm.toFixed(0)} km)`
+                : 'always “visible” on flat'}
+            </div>
+          </Html>
+        )}
       </group>
 
       {/* Range labels */}
-      <Html
-        position={markerPos(shapeModel, eyeHorizonKm, 1.05)}
-        distanceFactor={11}
-        style={{ pointerEvents: 'none' }}
-      >
-        <div style={labelStyle('#f0b429')}>
-          Gold ring · eye horizon ≈ {eyeHorizonKm.toFixed(1)} km
-        </div>
-      </Html>
-      <Html
-        position={markerPos(shapeModel, Math.min(everestVisKm, SURFACE_DEMO_MAX_KM), 1.08)}
-        distanceFactor={11}
-        style={{ pointerEvents: 'none' }}
-      >
-        <div style={labelStyle('#7ddea8')}>
-          Green ring · Everest still visible ≈ {everestVisKm.toFixed(0)} km
-          <br />
-          <span style={{ fontSize: 10, opacity: 0.9 }}>
-            (summit alone sees ≈ {everestFromSummitKm.toFixed(0)} km of sea)
-          </span>
-        </div>
-      </Html>
+      {labels && (
+        <>
+          <Html
+            position={markerPos(shapeModel, eyeHorizonKm, 1.05)}
+
+            zIndexRange={[2, 0]}
+            style={{ pointerEvents: 'none' }}
+          >
+            <div style={labelStyle('#f0b429')}>
+              eye horizon ≈ {eyeHorizonKm.toFixed(1)} km
+            </div>
+          </Html>
+          <Html
+            position={markerPos(shapeModel, Math.min(everestVisKm, SURFACE_DEMO_MAX_KM), 1.08)}
+
+            zIndexRange={[2, 0]}
+            style={{ pointerEvents: 'none' }}
+          >
+            <div style={labelStyle('#7ddea8')}>
+              Everest limit ≈ {everestVisKm.toFixed(0)} km
+            </div>
+          </Html>
+        </>
+      )}
     </>
   )
 }

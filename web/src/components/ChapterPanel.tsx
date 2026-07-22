@@ -5,6 +5,7 @@ import styles from './ChapterPanel.module.css'
 
 export function ChapterPanel() {
   const chapterId = useSimulation((s) => s.chapterId)
+  const panelOpen = useSimulation((s) => s.panelOpen)
   const chapter = getChapter(chapterId) ?? CHAPTERS[0]
   const subDemo = useEarthLab((s) => s.subDemo)
   const shapeModel = useEarthLab((s) => s.shapeModel)
@@ -14,12 +15,39 @@ export function ChapterPanel() {
   const next = idx < CHAPTERS.length - 1 ? CHAPTERS[idx + 1] : null
   const isEarth = chapter.id === 'earth-not-flat'
 
+  if (!panelOpen) {
+    return (
+      <button
+        type="button"
+        className={styles.reopen}
+        onClick={() => simulationStore.setPanelOpen(true)}
+        aria-label="Open chapter panel"
+        title="Open chapter panel"
+      >
+        <span className={styles.reopenText}>
+          Chapter {chapter.index} · {chapter.title}
+        </span>
+      </button>
+    )
+  }
+
   return (
     <aside className={styles.panel}>
       <header className={styles.header}>
-        <span className="tag">
-          Chapter {chapter.index} / {CHAPTERS.length}
-        </span>
+        <div className={styles.headerRow}>
+          <span className="tag">
+            Chapter {chapter.index} / {CHAPTERS.length}
+          </span>
+          <button
+            type="button"
+            className={styles.collapseBtn}
+            onClick={() => simulationStore.setPanelOpen(false)}
+            aria-label="Hide chapter panel"
+            title="Hide chapter panel"
+          >
+            ⟨ Hide
+          </button>
+        </div>
         <h2>{chapter.title}</h2>
         <p className={styles.model}>Model: {chapter.model}</p>
       </header>

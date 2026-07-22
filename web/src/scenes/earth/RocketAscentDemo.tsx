@@ -8,6 +8,7 @@ import {
   horizonDipDeg,
 } from '../../physics/earthGeometry'
 import { earthLabStore, useEarthLab } from '../../state/earthLabStore'
+import { useSimulation } from '../../state/simulationStore'
 import { FlatEarth, LaunchPadMarker, SphereEarth } from './EarthMeshes'
 import { getRocketWorldPosition } from './rocketPosition'
 
@@ -75,6 +76,7 @@ function RocketBody() {
   const exaggerated = useEarthLab((s) => s.exaggerated)
   const shapeModel = useEarthLab((s) => s.shapeModel)
   const showHorizonGuide = useEarthLab((s) => s.showHorizonGuide)
+  const labels = useSimulation((s) => s.showLabels)
 
   useFrame((_, dt) => {
     earthLabStore.tickLaunch(dt)
@@ -88,18 +90,24 @@ function RocketBody() {
     <>
       <group ref={groupRef}>
         <RocketMesh />
-        <Html distanceFactor={8} position={[0.15, 0.35, 0]} style={{ pointerEvents: 'none' }}>
-          <div
-            style={{
-              color: '#e8eefc',
-              fontSize: 11,
-              textShadow: '0 1px 3px #000',
-              whiteSpace: 'nowrap',
-            }}
+        {labels && (
+          <Html
+            position={[0.15, 0.35, 0]}
+            zIndexRange={[2, 0]}
+            style={{ pointerEvents: 'none' }}
           >
-            Rocket · {altitudeKm.toFixed(0)} km
-          </div>
-        </Html>
+            <div
+              style={{
+                color: '#e8eefc',
+                fontSize: 11,
+                textShadow: '0 1px 3px #000',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              Rocket · {altitudeKm.toFixed(0)} km
+            </div>
+          </Html>
+        )}
       </group>
       {showHorizonGuide && (
         <HorizonGuide altitudeKm={altitudeKm} exaggerated={exaggerated} model={shapeModel} />

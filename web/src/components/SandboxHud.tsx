@@ -1,5 +1,6 @@
 import { sandboxEscapeInfo } from '../scenes/GravitySandboxScene'
 import { newtonStore, useNewton } from '../state/newtonStore'
+import { HudShell } from './HudShell'
 import styles from './EarthLabHud.module.css'
 
 export function SandboxHud() {
@@ -14,7 +15,7 @@ export function SandboxHud() {
   const esc = sandboxEscapeInfo()
 
   return (
-    <div className={styles.hud}>
+    <HudShell lab="03" title="Gravity sandbox">
       <div className={styles.row}>
         <span className={styles.label}>Run</span>
         <button type="button" onClick={() => newtonStore.toggleSandboxPause()}>
@@ -171,6 +172,6 @@ export function SandboxHud() {
           not SI units.
         </div>
       </div>
-    </div>
+    </HudShell>
   )
 }

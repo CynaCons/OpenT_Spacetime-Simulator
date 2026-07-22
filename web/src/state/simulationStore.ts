@@ -32,6 +32,10 @@ interface SimulationState {
   freeTarget: [number, number, number]
   /** Incremented to request camera pose reset (distance + angles) */
   cameraResetToken: number
+  /** Chapter side panel visible */
+  panelOpen: boolean
+  /** Lab console (bottom-left HUD) expanded */
+  hudOpen: boolean
 }
 
 type Listener = () => void
@@ -52,6 +56,8 @@ let state: SimulationState = {
   focusBodyId: null,
   freeTarget: DEFAULT_FREE_TARGET,
   cameraResetToken: 0,
+  panelOpen: true,
+  hudOpen: true,
 }
 
 function emit() {
@@ -85,6 +91,9 @@ export const simulationStore = {
   selectBody: (selectedBodyId: string | null) => setState({ selectedBodyId }),
   toggleOrbits: () => setState({ showOrbits: !state.showOrbits }),
   toggleLabels: () => setState({ showLabels: !state.showLabels }),
+  setPanelOpen: (panelOpen: boolean) => setState({ panelOpen }),
+  togglePanel: () => setState({ panelOpen: !state.panelOpen }),
+  toggleHud: () => setState({ hudOpen: !state.hudOpen }),
 
   focusSun: (resetPose = false) =>
     setState({

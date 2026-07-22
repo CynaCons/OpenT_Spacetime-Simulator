@@ -64,6 +64,7 @@ export const CHAPTERS: Chapter[] = [
       'The solar system under Newton’s inverse-square law and Kepler’s laws — an extraordinarily successful model for centuries.',
     whatWeShow: [
       'Sun and planets on orbital paths',
+      'Moon orbiting Earth (visual-scale orbit, real 27.3-day period)',
       'Velocity (green) and force (red) vectors',
       'Period labels and Kepler T²/a³ check',
       'Planet tour with focus',
@@ -165,12 +166,13 @@ export const CHAPTERS: Chapter[] = [
     model: 'General Relativity (weak-field pedagogy)',
     status: 'available',
     summary:
-      'Gravity as spacetime curvature. Free-fall paths are geodesics. Newton’s force picture remains an excellent weak-field approximation.',
+      'Gravity as spacetime curvature. Release a probe at rest: nothing pulls it, yet it falls — it simply follows the straightest possible path through curved geometry. Free-fall paths are geodesics; Newton’s force picture remains an excellent weak-field approximation.',
     whatWeShow: [
-      'Warped “fabric” grid (metaphor + caveats)',
-      'Planetary geodesic paths',
-      'Force vs geodesic picture toggle',
-      'Photon path near mass; Mercury precession hint',
+      'Falling probe: released at rest, it rolls down the curvature well',
+      'Flat-spacetime ghost: no curvature → the probe just stays put',
+      'Warped “fabric” grid with funnel rings (metaphor + caveats)',
+      'Planetary geodesics — and the Moon, falling around Earth forever',
+      'Force vs geodesic picture toggle; photon path near mass',
     ],
     equations: [
       'Geodesic: free-fall = straightest path',
@@ -181,9 +183,10 @@ export const CHAPTERS: Chapter[] = [
     honestyNote: 'Rubber-sheet embedding is a teaching metaphor — not literal 4D spacetime.',
     demoIds: ['D10', 'D11'],
     howToExplore: [
-      'Raise central mass; watch the grid deepen.',
-      'Toggle Geodesic / Force / Both.',
-      'Focus Mercury; turn on Photon path; continue to proofs.',
+      'Release the probe; watch it pick up speed toward the mass.',
+      'Lower the mass to ~0.3: the fabric flattens and the same release barely falls.',
+      'Compare with the grey ghost — flat spacetime, no fall.',
+      'Toggle Geodesic / Force / Both; focus Mercury; turn on Photon; continue to proofs.',
     ],
   },
   {

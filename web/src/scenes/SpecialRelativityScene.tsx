@@ -1,9 +1,10 @@
-import { Html, Line, OrbitControls } from '@react-three/drei'
+import { Line, OrbitControls } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
-import { useMemo, type CSSProperties } from 'react'
+import { useMemo } from 'react'
 import { contractedLength, lorentzGamma } from '../physics/relativity'
 import { srStore, useSr } from '../state/srStore'
 import { SceneAtmosphere } from './shared/SceneAtmosphere'
+import { SceneLabel } from './shared/SceneLabel'
 
 const C_SCENE = 4 // scene units per “c” for light travel
 
@@ -86,13 +87,10 @@ function LightClock({
         <sphereGeometry args={[0.12, 12, 12]} />
         <meshBasicMaterial color="#ffe566" />
       </mesh>
-      <Html position={[x0, H / 2 + 0.55, 0]} center style={{ pointerEvents: 'none' }}>
-        <div style={tag(moving ? '#e27b58' : '#7ddea8')}>
-          {label}
-          <br />
-          ticks slower by γ={gamma.toFixed(3)}? {moving ? 'yes (lab)' : 'rest'}
-        </div>
-      </Html>
+      <SceneLabel position={[x0, H / 2 + 0.55, 0]} color={moving ? '#e27b58' : '#7ddea8'}>
+        {label}
+        {moving && ` · γ ${gamma.toFixed(2)}`}
+      </SceneLabel>
     </group>
   )
 }
@@ -110,19 +108,17 @@ function LengthRod({ beta, labTime }: { beta: number; labTime: number }) {
         <boxGeometry args={[L0, 0.15, 0.25]} />
         <meshStandardMaterial color="#5b9dff" transparent opacity={0.25} />
       </mesh>
-      <Html position={[0, 0.7, 0]} center style={{ pointerEvents: 'none' }}>
-        <div style={tag('#8ab4ff')}>Proper length L₀ = {L0.toFixed(1)}</div>
-      </Html>
+      <SceneLabel position={[0, 0.75, 0]} color="#8ab4ff">
+        at rest · L₀ = {L0.toFixed(1)}
+      </SceneLabel>
       {/* moving contracted rod */}
       <mesh position={[x, -0.15, 0]}>
         <boxGeometry args={[L, 0.18, 0.28]} />
         <meshStandardMaterial color="#e27b58" metalness={0.2} />
       </mesh>
-      <Html position={[x, -0.55, 0]} center style={{ pointerEvents: 'none' }}>
-        <div style={tag('#e27b58')}>
-          Moving L = L₀/γ = {L.toFixed(2)} (β={beta.toFixed(2)})
-        </div>
-      </Html>
+      <SceneLabel position={[x, -0.6, 0]} color="#e27b58">
+        moving · L = {L.toFixed(2)}
+      </SceneLabel>
     </group>
   )
 }
@@ -160,22 +156,18 @@ export function SpecialRelativityScene() {
             color="#e27b58"
             lineWidth={2}
           />
-          <Html position={[1.2 + beta * 1.2, -2.2, 0]} center style={{ pointerEvents: 'none' }}>
-            <div style={tag('#e27b58')}>v = {beta.toFixed(2)} c</div>
-          </Html>
+          <SceneLabel position={[1.2 + beta * 1.2, -2.25, 0]} color="#e27b58">
+            v = {beta.toFixed(2)} c
+          </SceneLabel>
         </>
       ) : (
         <LengthRod beta={beta} labTime={labTime} />
       )}
 
       {showGamma && (
-        <Html position={[0, 3.6, 0]} center style={{ pointerEvents: 'none' }}>
-          <div style={{ ...tag('#e8eefc'), fontSize: 13, textAlign: 'center' }}>
-            γ = 1/√(1−β²) = <strong>{gamma.toFixed(4)}</strong>
-            <br />
-            Moving clocks: Δt_lab = γ Δτ · Lengths: L = L₀/γ
-          </div>
-        </Html>
+        <SceneLabel position={[0, 3.6, 0]} color="#e8eefc" style={{ fontFamily: 'var(--mono)' }}>
+          γ = {gamma.toFixed(3)}
+        </SceneLabel>
       )}
 
       <OrbitControls
@@ -187,17 +179,4 @@ export function SpecialRelativityScene() {
       />
     </>
   )
-}
-
-function tag(color: string): CSSProperties {
-  return {
-    color,
-    fontSize: 11,
-    textShadow: '0 1px 3px #000',
-    background: '#0a1220cc',
-    padding: '3px 7px',
-    borderRadius: 4,
-    border: `1px solid ${color}55`,
-    whiteSpace: 'nowrap',
-  }
 }

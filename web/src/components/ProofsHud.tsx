@@ -8,6 +8,7 @@ import {
   deflectionArcsec,
 } from '../physics/relativity'
 import { proofsStore, useProofs } from '../state/proofsStore'
+import { HudShell } from './HudShell'
 import styles from './EarthLabHud.module.css'
 
 export function ProofsHud() {
@@ -27,7 +28,7 @@ export function ProofsHud() {
   const errKm = clockErrorUsToKm(rate * gpsDays)
 
   return (
-    <div className={styles.hud}>
+    <HudShell lab="07" title="Proofs of GR">
       <div className={styles.row}>
         <span className={styles.label}>Proof</span>
         <button
@@ -168,6 +169,6 @@ export function ProofsHud() {
         historically important: gravitational redshift, Shapiro delay, binary pulsars, GW170817 —
         candidates for later demos.
       </div>
-    </div>
+    </HudShell>
   )
 }

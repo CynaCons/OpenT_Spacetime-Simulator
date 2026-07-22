@@ -64,6 +64,9 @@ Phase 8  Polish, content, deploy                      [x] v1
 - [x] Geodesic orbits (Mercury/Earth/Jupiter)  
 - [x] Force vs geodesic picture  
 - [x] Photon path; honesty metaphor note  
+- [x] **Falling probe (hero):** released at rest, rolls down the curvature well; flat-spacetime ghost stays put; release-radius slider; trail draped on fabric  
+- [x] Funnel rings on the fabric (classic embedding read)  
+- [x] Moon falling around Earth (geodesic closes into an orbit)  
 
 **Code:** `GeneralRelativityScene.tsx`, `GrHud.tsx`, `grStore.ts`
 
@@ -79,13 +82,21 @@ Phase 8  Polish, content, deploy                      [x] v1
 
 ---
 
-## Phase 8 — Polish `[x]` v1
+## Phase 8 — Polish `[x]` v1 · `[x]` UX pass 2
 
 - [x] All chapters `available`  
 - [x] Unified App routing by chapter  
 - [x] Top bar shortcuts per lab  
 - [x] README + PLAN updated  
 - [x] Production build passes  
+
+### UX pass 2 (declutter + collapse)
+- [x] **Label discipline:** all floating prose/stat cards removed from 3D viewport; only one-line name chips remain (`SceneLabel`), stacked under the HUD  
+- [x] **Global Labels toggle** in top bar works in every chapter (Earth lab, Mercury, SR, GR, proofs, solar)  
+- [x] **Collapsible chapter panel** (⟨ Hide → slim vertical reopen tab)  
+- [x] **Collapsible “Lab console”** (`HudShell`): unified LAB NN header, collapses to a pill; state persists across chapters  
+- [x] Earth-lab labels: fixed screen size (no more giant close-camera labels)  
+- [x] **Moon orbiting Earth** in solar/Newton scenes (+ GR scene); double-click to focus  
 - [ ] Optional later: Eratosthenes, eccentric orbits, drag-aim sandbox, formal citations  
 
 ---
@@ -97,6 +108,7 @@ Phase 8  Polish, content, deploy                      [x] v1
 | 2026-07-21 | Project init through Phase 4 (Earth, Newton, sandbox, Mercury). |
 | 2026-07-22 | Phases 5–7 implemented (SR, GR, proofs). Full story arc v1. Build + review. |
 | 2026-07-22 | UX/3D polish: chapter rail, SceneAtmosphere, vignette, HUD/UI refresh, solar hover glow, auto-rotate on select labs. |
+| 2026-07-22 | UX pass 2: collapsible chapter panel + Lab console (HudShell); in-scene labels reduced to one-line chips (SceneLabel) with global Labels toggle; Moon orbiting Earth (solar + GR); **GR chapter rebuilt around falling** — release-probe demo with flat-spacetime ghost, funnel rings, Moon-around-Earth geodesic. Browser smoke OK (only known THREE.Clock deprecation warn). |
 
 ---
 

@@ -124,9 +124,33 @@ export const PLANETS: BodyDef[] = [
   },
 ]
 
+/**
+ * Moon — orbits Earth. Orbit radius is visual (real ≈ 0.00257 AU would be
+ * invisible at scene scale); period and phase-rate are real.
+ */
+export const MOON = {
+  id: 'moon',
+  name: 'Moon',
+  periodDays: 27.322,
+  color: '#c9ccd4',
+  visualRadius: 0.13,
+  /** Visual orbit radius around Earth in scene units */
+  orbitSceneRadius: 0.85,
+}
+
 /** Mean motion (rad / sim-day) for circular Keplerian scaffold */
 export function meanMotion(periodDays: number): number {
   return (Math.PI * 2) / periodDays
+}
+
+/** Moon offset from Earth in scene units (circular, coplanar scaffold). */
+export function getMoonOffset(simDays: number): [number, number, number] {
+  const ang = meanMotion(MOON.periodDays) * simDays
+  return [
+    Math.cos(ang) * MOON.orbitSceneRadius,
+    0,
+    Math.sin(ang) * MOON.orbitSceneRadius,
+  ]
 }
 
 export function getPlanetById(id: string): BodyDef | undefined {
@@ -139,6 +163,11 @@ export function getBodyPosition(
   simDays: number,
 ): [number, number, number] {
   if (id === 'sun') return [0, 0, 0]
+  if (id === 'moon') {
+    const [ex, ey, ez] = getBodyPosition('earth', simDays)
+    const [mx, my, mz] = getMoonOffset(simDays)
+    return [ex + mx, ey + my, ez + mz]
+  }
   const body = getPlanetById(id)
   if (!body) return [0, 0, 0]
   const r = body.a * AU_SCENE

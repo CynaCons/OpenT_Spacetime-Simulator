@@ -1,13 +1,22 @@
 import { useFrame, type ThreeEvent } from '@react-three/fiber'
-import { Html, Line } from '@react-three/drei'
+import { Line } from '@react-three/drei'
 import { useMemo, useRef, useState } from 'react'
 import type { Mesh } from 'three'
 import { MathUtils, Vector3 } from 'three'
 import { accelMagnitude, circularSpeedAuPerDay } from '../physics/newton'
-import { AU_SCENE, PLANETS, SUN, getBodyPosition, meanMotion } from '../physics/solarSystemData'
+import {
+  AU_SCENE,
+  MOON,
+  PLANETS,
+  SUN,
+  getBodyPosition,
+  getMoonOffset,
+  meanMotion,
+} from '../physics/solarSystemData'
 import { newtonStore, useNewton } from '../state/newtonStore'
 import { simulationStore, useSimulation } from '../state/simulationStore'
 import { SceneAtmosphere } from './shared/SceneAtmosphere'
+import { SceneLabel } from './shared/SceneLabel'
 
 function OrbitRing({ radius, active }: { radius: number; active?: boolean }) {
   const points = useMemo(() => {
@@ -152,28 +161,68 @@ function Planet({
       {showVelocity && <Arrow origin={[0, 0, 0]} dir={vDir} color="#7ddea8" length={vLen} />}
       {showForce && <Arrow origin={[0, 0, 0]} dir={fDir} color="#f07178" length={fLen} />}
       {(showLabel || showPeriods) && (
-        <Html distanceFactor={26} style={{ pointerEvents: 'none' }}>
-          <div
-            style={{
-              color: hot ? '#fff' : '#9eb2d4',
-              fontSize: 12,
-              whiteSpace: 'nowrap',
-              textShadow: '0 2px 8px #000',
-              transform: 'translate(-50%, 10px)',
-              textAlign: 'center',
-              fontWeight: hot ? 600 : 400,
-            }}
-          >
-            {name}
-            {showPeriods && (
-              <div style={{ fontSize: 10, color: '#8b9bb8', fontWeight: 400 }}>
-                a={a.toFixed(2)} AU · T≈
-                {periodYears < 1 ? `${periodDays.toFixed(0)} d` : `${periodYears.toFixed(1)} y`}
-              </div>
-            )}
-          </div>
-        </Html>
+        <SceneLabel
+          position={[0, visualRadius + 0.55, 0]}
+          color={hot ? '#ffffff' : '#9eb2d4'}
+          distanceFactor={26}
+        >
+          {name}
+          {showPeriods && (
+            <span style={{ color: '#8b9bb8', fontWeight: 400 }}>
+              {' '}
+              · {a.toFixed(2)} AU ·{' '}
+              {periodYears < 1 ? `${periodDays.toFixed(0)} d` : `${periodYears.toFixed(1)} y`}
+            </span>
+          )}
+        </SceneLabel>
       )}
+    </group>
+  )
+}
+
+/** Moon on a visual-scale orbit around Earth (period and phase are real). */
+function Moon({ simDays, showLabel }: { simDays: number; showLabel: boolean }) {
+  const [ex, , ez] = getBodyPosition('earth', simDays)
+  const [mx, , mz] = getMoonOffset(simDays)
+
+  const ring = useMemo(() => {
+    const segs = 72
+    const pts: [number, number, number][] = []
+    for (let i = 0; i <= segs; i++) {
+      const t = (i / segs) * Math.PI * 2
+      pts.push([Math.cos(t) * MOON.orbitSceneRadius, 0, Math.sin(t) * MOON.orbitSceneRadius])
+    }
+    return pts
+  }, [])
+
+  const onFocus = (e: ThreeEvent<MouseEvent>) => {
+    e.stopPropagation()
+    simulationStore.focusBody('moon')
+  }
+
+  return (
+    <group position={[ex, 0, ez]}>
+      <Line points={ring} color="#3a4a66" lineWidth={0.8} transparent opacity={0.45} />
+      <group position={[mx, 0, mz]}>
+        <mesh
+          onDoubleClick={onFocus}
+          onPointerOver={(e) => {
+            e.stopPropagation()
+            document.body.style.cursor = 'pointer'
+          }}
+          onPointerOut={() => {
+            document.body.style.cursor = 'grab'
+          }}
+        >
+          <sphereGeometry args={[MOON.visualRadius, 20, 20]} />
+          <meshStandardMaterial color={MOON.color} roughness={0.85} metalness={0.05} />
+        </mesh>
+        {showLabel && (
+          <SceneLabel position={[0, MOON.visualRadius + 0.32, 0]} color="#aab4c8" distanceFactor={18}>
+            Moon
+          </SceneLabel>
+        )}
+      </group>
     </group>
   )
 }
@@ -246,6 +295,7 @@ export function SolarSystemScene() {
       <TimeDriver />
       <SceneAtmosphere background="#050814" fogNear={80} fogFar={420} starCount={4500} />
       <SunBody />
+      <Moon simDays={simDays} showLabel={showLabels} />
       {PLANETS.map((p) => (
         <group key={p.id}>
           {showOrbits && (

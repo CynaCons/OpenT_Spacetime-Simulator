@@ -1,5 +1,6 @@
 import { lorentzGamma, properTimeFraction } from '../physics/relativity'
 import { srStore, useSr } from '../state/srStore'
+import { HudShell } from './HudShell'
 import styles from './EarthLabHud.module.css'
 
 export function SrHud() {
@@ -11,7 +12,7 @@ export function SrHud() {
   const properFrac = properTimeFraction(beta)
 
   return (
-    <div className={styles.hud}>
+    <HudShell lab="05" title="Special relativity">
       <div className={styles.row}>
         <span className={styles.label}>Demo</span>
         <button
@@ -81,6 +82,6 @@ export function SrHud() {
           with GR (next chapters) it becomes mission-critical.
         </div>
       </div>
-    </div>
+    </HudShell>
   )
 }
